@@ -10,8 +10,6 @@ contract Spt {
 
     mapping(uint256 => mapping(uint256 => bytes32)) internal lists;
 
-    mapping(uint256 => bytes[]) internal elements;
-
     function setupDepth(uint _depth) public {
         depth = _depth;
         maxElements = 2**depth;
