@@ -1,6 +1,5 @@
-pragma solidity >=0.8.0;
+pragma solidity ^0.7.0;
 
-/// @title Voting with delegation.
 contract Spt {
 
     bytes32 internal emptyElement = 0x0000000000000000000000000000000000000000000000000000000000000000;
@@ -8,4 +7,10 @@ contract Spt {
 
     uint internal depth;
     uint internal maxElements;
+
+    function setupDepth(uint _depth) public {
+        depth = _depth;
+        maxElements = 2**depth;
+    }
+
 }
