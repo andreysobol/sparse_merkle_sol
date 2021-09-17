@@ -72,4 +72,8 @@ contract Spt {
         return sha256(abi.encodePacked(v0, v1));
     }
 
+    function calculateAndUpdateLeaf(uint level, uint i) public {
+        lists[level+1][i] = calculateLeaf(level, i);
+    }
+
 }
