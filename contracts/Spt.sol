@@ -64,7 +64,7 @@ contract Spt {
         }
 
         if (v1 == 0) {
-            v0 = calculateEmptyLeafHash(level);
+            v1 = calculateEmptyLeafHash(level);
         }
 
         return sha256(abi.encodePacked(v0, v1));
