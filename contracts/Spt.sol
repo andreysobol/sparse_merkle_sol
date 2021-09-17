@@ -50,4 +50,26 @@ contract Spt {
         return cacheEmptyValues[level];
     }
 
+    function calculateLeaf(uint level, uint i) public returns (bytes32) {
+        uint i0 = 2*i;
+        uint i1 = 2*i+1;
+
+        bytes32 v0 = lists[level][i0];
+        bytes32 v1 = lists[level][i1];
+
+        if ((v0 == 0) && (v1 == 0)) {
+            return 0x00;
+        }
+
+        if (v0 == 0) {
+            v0 = calculateEmptyLeafHash(level);
+        }
+
+        if (v1 == 0) {
+            v0 = calculateEmptyLeafHash(level);
+        }
+
+        return sha256(abi.encodePacked(v0, v1));
+    }
+
 }
