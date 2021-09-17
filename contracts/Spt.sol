@@ -15,9 +15,9 @@ contract Spt {
         maxElements = 2**depth;
     }
 
-    function getRoot() public view returns (uint) {
+    function getRoot() public view returns (bytes32) {
         if (lists[depth][0] == 0x00) {
-            return 0;
+            return 0x00;
             //calculate_empty_leaf_hash will be here
         } else {
             return lists[depth][0];
