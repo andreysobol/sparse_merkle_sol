@@ -25,4 +25,21 @@ contract Spt {
             return lists[depth][0];
         }
     }
+
+    function calculateEmptyLeafHash(uint level) public returns (bytes32) {
+
+        if (cacheEmptyValues[level] != 0x00) {
+            return cacheEmptyValues[level];
+        }
+
+        if (level == 0) {
+            cacheEmptyValues[level] = sha256(abi.encodePacked(emptyElement));
+        } else {
+            bytes32 prev = calculateEmptyLeafHash(level - 1);
+            cacheEmptyValues[level] = sha256(abi.encodePacked(prev, prev));
+        }
+
+        return cacheEmptyValues[level];
+    }
+
 }
