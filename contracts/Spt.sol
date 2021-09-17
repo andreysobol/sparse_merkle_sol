@@ -76,4 +76,12 @@ contract Spt {
         lists[level+1][i] = calculateLeaf(level, i);
     }
 
+    function modifyHashedElement(uint index, bytes32 hashedElement) public {
+        lists[0][index] = hashedElement;
+        for (uint level = 0; level < depth - 1; level++) {
+            uint current_index = index / (2**(level+1));
+            calculateAndUpdateLeaf(level, current_index);
+        }
+    }
+
 }
