@@ -77,8 +77,8 @@ contract Spt {
     function modifyHashedElement(uint index, bytes32 hashedElement) public {
         lists[0][index] = hashedElement;
         for (uint level = 0; level < depth - 1; level++) {
-            uint current_index = index / (2**(level+1));
-            calculateAndUpdateLeaf(level, current_index);
+            uint currentIndex = index / (2**(level+1));
+            calculateAndUpdateLeaf(level, currentIndex);
         }
     }
 
