@@ -32,7 +32,7 @@ contract Spt {
         }
     }
 
-    function calculateEmptyLeafHash(uint level) public returns (bytes32) {
+    function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
 
         if (cacheEmptyValues[level] != 0x00) {
             return cacheEmptyValues[level];
@@ -48,7 +48,7 @@ contract Spt {
         return cacheEmptyValues[level];
     }
 
-    function calculateLeaf(uint level, uint i) public returns (bytes32) {
+    function calculateLeaf(uint level, uint i) internal returns (bytes32) {
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
@@ -70,7 +70,7 @@ contract Spt {
         return sha256(abi.encodePacked(v0, v1));
     }
 
-    function calculateAndUpdateLeaf(uint level, uint i) public {
+    function calculateAndUpdateLeaf(uint level, uint i) internal {
         lists[level+1][i] = calculateLeaf(level, i);
     }
 
