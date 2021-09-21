@@ -15,6 +15,18 @@ contract Spt {
         maxElements = 2**depth;
     }
 
+    function increaseDepth(uint amountOfLevel) public {
+        assert(amountOfLevel > 0);
+        uint oldDepth = depth;
+        uint newDepth = depth + amountOfLevel;
+
+        uint currentIndex = 0;
+        for (uint level = oldDepth; level < newDepth - 1; level++) {
+            calculateAndUpdateLeaf(level, currentIndex);
+        }
+        setupDepth(newDepth);
+    }
+
     function getRoot() public view returns (bytes32) {
         if (lists[depth][0] == 0x00) {
             return getEmptyLeafHash(depth);
