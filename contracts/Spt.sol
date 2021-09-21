@@ -11,6 +11,7 @@ contract Spt {
     mapping(uint256 => mapping(uint256 => bytes32)) internal lists;
 
     function setupDepth(uint _depth) public {
+        assert(_depth > 0);
         depth = _depth;
         maxElements = 2**depth;
     }
@@ -23,6 +24,19 @@ contract Spt {
         uint currentIndex = 0;
         for (uint level = oldDepth; level < newDepth - 1; level++) {
             calculateAndUpdateLeaf(level, currentIndex);
+        }
+        setupDepth(newDepth);
+    }
+
+    function decreaseDepth(uint amountOfLevel) public {
+        uint oldDepth = depth;
+        uint newDepth = depth - amountOfLevel;
+        assert(amountOfLevel > 0);
+        assert(newDepth > 0);
+
+        uint checkIndex = 1;
+        for (uint level = newDepth; level < oldDepth - 1; level++) {
+            assert(lists[level][checkIndex] == 0x00);
         }
         setupDepth(newDepth);
     }
