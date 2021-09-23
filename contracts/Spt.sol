@@ -58,7 +58,7 @@ contract Spt {
         }
     }
 
-    function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
+    function calculateEmptyLeafHash(uint level) public returns (bytes32) {
 
         if (cacheEmptyValues[level] != 0x00) {
             return cacheEmptyValues[level];
