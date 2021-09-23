@@ -1,17 +1,23 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
 contract Spt {
+    bytes32 public emptyElement = 0x0000000000000000000000000000000000000000000000000000000000000000;
+    mapping(uint256 => bytes32) public cacheEmptyValues;
 
-    bytes32 internal emptyElement = 0x0000000000000000000000000000000000000000000000000000000000000000;
-    mapping(uint256 => bytes32) internal cacheEmptyValues;
+    uint public depth;
+    uint public maxElements;
 
-    uint internal depth;
-    uint internal maxElements;
+    mapping(uint256 => mapping(uint256 => bytes32)) public lists;
+    mapping(uint256 => bytes) public elementData; 
 
-    mapping(uint256 => mapping(uint256 => bytes32)) internal lists;
+    constructor(uint _depth) {
+        assert(_depth > 0);
+        setupDepth(_depth);
+        calculateEmptyLeafHash(_depth);
+    }
 
     function setupDepth(uint _depth) internal {
-        assert(_depth > 0);
         depth = _depth;
         maxElements = 2**depth;
     }
@@ -20,6 +26,8 @@ contract Spt {
         assert(amountOfLevel > 0);
         uint oldDepth = depth;
         uint newDepth = depth + amountOfLevel;
+
+        calculateEmptyLeafHash(newDepth);
 
         uint currentIndex = 0;
         for (uint level = oldDepth; level < newDepth - 1; level++) {
@@ -105,5 +113,11 @@ contract Spt {
             uint currentIndex = index / (2**(level+1));
             calculateAndUpdateLeaf(level, currentIndex);
         }
+    }
+
+    function modifyElement(uint index, bytes calldata data) internal {
+        elementData[index] = data;
+        bytes32 hashedElement = sha256(data);
+        modifyHashedElement(index, hashedElement);
     }
 }

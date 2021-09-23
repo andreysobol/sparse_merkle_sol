@@ -6,4 +6,4 @@ def isolate(fn_isolation):
 
 @pytest.fixture(scope="module")
 def public_spt(PublicSpt, accounts):
-    return PublicSpt.deploy({'from': accounts[0]})
+    return PublicSpt.deploy(1, {'from': accounts[0]})
