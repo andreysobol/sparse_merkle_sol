@@ -50,20 +50,7 @@ contract Spt {
     }
 
     function getRoot() public view returns (bytes32) {
-        if (lists[depth][0] == 0x00) {
-            return getEmptyLeafHash(depth);
-        } else {
-            return lists[depth][0];
-        }
-    }
-
-    function getEmptyLeafHash(uint level) public view returns (bytes32) {
-        if (level == 0) {
-            return sha256(abi.encodePacked(emptyElement));
-        } else {
-            bytes32 prev = getEmptyLeafHash(level - 1);
-            return sha256(abi.encodePacked(prev, prev));
-        }
+        return lists[depth][0];
     }
 
     function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
