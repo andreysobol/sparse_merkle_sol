@@ -10,13 +10,13 @@ contract Spt {
 
     mapping(uint256 => mapping(uint256 => bytes32)) internal lists;
 
-    function setupDepth(uint _depth) public {
+    function setupDepth(uint _depth) internal {
         assert(_depth > 0);
         depth = _depth;
         maxElements = 2**depth;
     }
 
-    function increaseDepth(uint amountOfLevel) public {
+    function increaseDepth(uint amountOfLevel) internal {
         assert(amountOfLevel > 0);
         uint oldDepth = depth;
         uint newDepth = depth + amountOfLevel;
@@ -28,7 +28,7 @@ contract Spt {
         setupDepth(newDepth);
     }
 
-    function decreaseDepth(uint amountOfLevel) public {
+    function decreaseDepth(uint amountOfLevel) internal {
         uint oldDepth = depth;
         uint newDepth = depth - amountOfLevel;
         assert(amountOfLevel > 0);
@@ -58,8 +58,7 @@ contract Spt {
         }
     }
 
-    function calculateEmptyLeafHash(uint level) public returns (bytes32) {
-
+    function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
         if (cacheEmptyValues[level] != 0x00) {
             return cacheEmptyValues[level];
         }
@@ -100,12 +99,11 @@ contract Spt {
         lists[level+1][i] = calculateLeaf(level, i);
     }
 
-    function modifyHashedElement(uint index, bytes32 hashedElement) public {
+    function modifyHashedElement(uint index, bytes32 hashedElement) internal {
         lists[0][index] = hashedElement;
         for (uint level = 0; level < depth - 1; level++) {
             uint currentIndex = index / (2**(level+1));
             calculateAndUpdateLeaf(level, currentIndex);
         }
     }
-
 }
