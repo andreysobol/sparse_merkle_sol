@@ -2,19 +2,21 @@
 pragma solidity ^0.7.0;
 
 contract Spt {
-    bytes32 public emptyElement = 0x0000000000000000000000000000000000000000000000000000000000000000;
-    mapping(uint256 => bytes32) public cacheEmptyValues;
+    bytes public emptyElement;
+    mapping(uint256 => bytes32) public cacheEmptyValues; // can be a dynamic array
 
     uint public depth;
     uint public maxElements;
 
-    mapping(uint256 => mapping(uint256 => bytes32)) public lists;
+    // tree level => index inside level => element hash
+    mapping(uint256 => mapping(uint256 => bytes32)) public tree;
     mapping(uint256 => bytes) public elementData; 
 
     constructor(uint _depth) {
         assert(_depth > 0);
         setupDepth(_depth);
         calculateEmptyLeafHash(_depth);
+        tree[depth][0] = cacheEmptyValues[depth];
     }
 
     function setupDepth(uint _depth) internal {
@@ -44,13 +46,13 @@ contract Spt {
 
         uint checkIndex = 1;
         for (uint level = newDepth; level < oldDepth - 1; level++) {
-            assert(lists[level][checkIndex] == 0x00);
+            assert(tree[level][checkIndex] == 0x00);
         }
         setupDepth(newDepth);
     }
 
     function getRoot() public view returns (bytes32) {
-        return lists[depth][0];
+        return tree[depth][0];
     }
 
     function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
@@ -59,7 +61,7 @@ contract Spt {
         }
 
         if (level == 0) {
-            cacheEmptyValues[level] = sha256(abi.encodePacked(emptyElement));
+            cacheEmptyValues[level] = sha256(emptyElement);
         } else {
             bytes32 prev = calculateEmptyLeafHash(level - 1);
             cacheEmptyValues[level] = sha256(abi.encodePacked(prev, prev));
@@ -72,30 +74,30 @@ contract Spt {
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
-        bytes32 v0 = lists[level][i0];
-        bytes32 v1 = lists[level][i1];
+        bytes32 v0 = tree[level][i0];
+        bytes32 v1 = tree[level][i1];
 
         if ((v0 == 0) && (v1 == 0)) {
             return 0x00;
         }
 
         if (v0 == 0) {
-            v0 = calculateEmptyLeafHash(level);
+            v0 = cacheEmptyValues[level];
         }
 
         if (v1 == 0) {
-            v1 = calculateEmptyLeafHash(level);
+            v1 = cacheEmptyValues[level];
         }
 
         return sha256(abi.encodePacked(v0, v1));
     }
 
     function calculateAndUpdateLeaf(uint level, uint i) internal {
-        lists[level+1][i] = calculateLeaf(level, i);
+        tree[level+1][i] = calculateLeaf(level, i);
     }
 
     function modifyHashedElement(uint index, bytes32 hashedElement) internal {
-        lists[0][index] = hashedElement;
+        tree[0][index] = hashedElement;
         for (uint level = 0; level < depth - 1; level++) {
             uint currentIndex = index / (2**(level+1));
             calculateAndUpdateLeaf(level, currentIndex);
@@ -106,5 +108,10 @@ contract Spt {
         elementData[index] = data;
         bytes32 hashedElement = sha256(data);
         modifyHashedElement(index, hashedElement);
+    }
+
+    function removeElement(uint index) internal {
+        elementData[index] = emptyElement;
+        modifyHashedElement(index, 0x00);
     }
 }
