@@ -32,7 +32,7 @@ contract Spt {
         calculateEmptyLeafHash(newDepth);
 
         uint currentIndex = 0;
-        for (uint level = oldDepth; level < newDepth - 1; level++) {
+        for (uint level = oldDepth; level < newDepth; level++) {
             calculateAndUpdateLeaf(level, currentIndex);
         }
         setupDepth(newDepth);
@@ -45,14 +45,18 @@ contract Spt {
         assert(newDepth > 0);
 
         uint checkIndex = 1;
-        for (uint level = newDepth; level < oldDepth - 1; level++) {
+        for (uint level = newDepth; level < oldDepth; level++) {
             assert(tree[level][checkIndex] == 0x00);
         }
         setupDepth(newDepth);
     }
 
     function getRoot() public view returns (bytes32) {
-        return tree[depth][0];
+        if (tree[depth][0] == 0x00) {
+            return cacheEmptyValues[depth];
+        } else {
+            return tree[depth][0];
+        }
     }
 
     function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
@@ -98,7 +102,7 @@ contract Spt {
 
     function modifyHashedElement(uint index, bytes32 hashedElement) internal {
         tree[0][index] = hashedElement;
-        for (uint level = 0; level < depth - 1; level++) {
+        for (uint level = 0; level < depth; level++) {
             uint currentIndex = index / (2**(level+1));
             calculateAndUpdateLeaf(level, currentIndex);
         }
