@@ -25,4 +25,12 @@ contract PublicSpt is Spt {
     function _modifyElement(uint index, bytes calldata element) public {
         super.modifyElement(index, element);
     }
+
+    function _addElement(uint index, bytes calldata element) public {
+        super.addElement(index, element);
+    }
+
+    function _removeElement(uint index) public {
+        super.removeElement(index);
+    }
 }

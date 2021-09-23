@@ -101,6 +101,7 @@ contract Spt {
     }
 
     function modifyHashedElement(uint index, bytes32 hashedElement) internal {
+        require(index < maxElements && index >= 0, "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint level = 0; level < depth; level++) {
             uint currentIndex = index / (2**(level+1));
@@ -114,7 +115,13 @@ contract Spt {
         modifyHashedElement(index, hashedElement);
     }
 
+    function addElement(uint index, bytes calldata data) internal {
+        require(elementData[index].length == 0, "Element already exists");
+        modifyElement(index, data);
+    }
+
     function removeElement(uint index) internal {
+        require(elementData[index].length != 0, "Can't remove already empty element");
         elementData[index] = emptyElement;
         modifyHashedElement(index, 0x00);
     }
