@@ -137,4 +137,19 @@ def test_decrease_depth(public_spt, accounts):
     assert root == get_root_4([b'apple', b'', b'banana', b''])
 
 
+def test_decrease_non_empty(public_spt, accounts):
+    spt = PublicSpt.deploy(3, {"from": accounts[0]})
+
+    tx = spt._addElement(2, b'banana')
+    tx = spt._addElement(5, b'super banana')
+
+    reverted = False
+
+    try:
+        tx = spt._decreaseDepth(1)
+    except Exception as e:
+        reverted = True
+        assert "Subtree must be empty" in e.message
+
+    assert reverted
 
