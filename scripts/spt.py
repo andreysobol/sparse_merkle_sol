@@ -23,7 +23,7 @@ def main():
 
     gas_used_remove = []
     for item in range(0, 1024):
-        tx = tree._removeElement(item, b'apple')
+        tx = tree._removeElement(item)
         gas_used_remove.append(tx.gas_used)
 
     print("Remove")
