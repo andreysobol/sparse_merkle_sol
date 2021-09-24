@@ -122,7 +122,7 @@ contract Spt {
 
     function removeElement(uint index) internal {
         require(elementData[index].length != 0, "Can't remove already empty element");
-        elementData[index] = emptyElement;
+        delete elementData[index];
         modifyHashedElement(index, 0x00);
     }
 }
