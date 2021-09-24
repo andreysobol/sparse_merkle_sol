@@ -14,10 +14,9 @@ contract Spt {
     bytes32 constant internal EMPTY_LEAF = 0x00;
 
     constructor(uint _depth) {
-        assert(_depth > 0);
+        require(_depth > 0, "Depth must be non-zero");
         setupDepth(_depth);
         calculateEmptyLeafHash(0, _depth);
-        tree[depth][0] = cacheEmptyValues[depth];
     }
 
     function setupDepth(uint _depth) internal {
@@ -26,28 +25,28 @@ contract Spt {
     }
 
     function increaseDepth(uint depthDifference) internal {
-        assert(depthDifference > 0);
+        require(depthDifference > 0, "depthDifference must be non-zero");
         uint oldDepth = depth;
+        require(depthDifference < uint256(-1) - oldDepth, "Overflow protection");
         uint newDepth = oldDepth + depthDifference;
 
         calculateEmptyLeafHash(oldDepth+1, newDepth);
 
-        uint currentIndex = 0;
         for (uint level = oldDepth; level < newDepth; level++) {
-            calculateAndUpdateLeaf(level, currentIndex);
+            calculateAndUpdateLeaf(level, 0);
         }
         setupDepth(newDepth);
     }
 
     function decreaseDepth(uint depthDifference) internal {
+        require(depthDifference > 0, "depthDifference must be non-zero");
         uint oldDepth = depth;
+        require(depthDifference < oldDepth, "Overflow protection");
         uint newDepth = oldDepth - depthDifference;
-        assert(depthDifference > 0);
-        assert(newDepth > 0);
 
         uint checkIndex = 1;
         for (uint level = newDepth; level < oldDepth; level++) {
-            assert(tree[level][checkIndex] == EMPTY_LEAF);
+            require(tree[level][checkIndex] == EMPTY_LEAF, "Subtree must be empty");
         }
         setupDepth(newDepth);
     }
@@ -78,7 +77,6 @@ contract Spt {
     }
 
     function calculateAndUpdateLeaf(uint level, uint i) internal {
-
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
