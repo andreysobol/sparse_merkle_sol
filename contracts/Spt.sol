@@ -16,7 +16,7 @@ contract Spt {
     constructor(uint _depth) {
         assert(_depth > 0);
         setupDepth(_depth);
-        calculateEmptyLeafHash(_depth);
+        calculateEmptyLeafHash(0, _depth);
         tree[depth][0] = cacheEmptyValues[depth];
     }
 
@@ -30,7 +30,7 @@ contract Spt {
         uint oldDepth = depth;
         uint newDepth = oldDepth + depthDifference;
 
-        calculateEmptyLeafHash(newDepth);
+        calculateEmptyLeafHash(oldDepth+1, newDepth);
 
         uint currentIndex = 0;
         for (uint level = oldDepth; level < newDepth; level++) {
@@ -60,16 +60,20 @@ contract Spt {
         }
     }
 
-    function calculateEmptyLeafHash(uint level) internal {
-        if (cacheEmptyValues[0] == EMPTY_LEAF) {
-            cacheEmptyValues[0] = sha256("");
+    function calculateEmptyLeafHash(uint fromLevel, uint toLevel) internal {
+        bytes32 prev;
+        if (fromLevel == 0) {
+            cacheEmptyValues[0] = prev = sha256("");
+            fromLevel = 1;
+        } else {
+            prev = cacheEmptyValues[fromLevel-1];
         }
 
-        for (uint index = 1; index <= level; index += 1) {
-            if (cacheEmptyValues[index] == EMPTY_LEAF) {
-                bytes32 prev = cacheEmptyValues[index-1];
-                cacheEmptyValues[index] = sha256(abi.encodePacked(prev, prev));
-            }
+        for (uint index = fromLevel; index <= toLevel; index += 1) {
+            // we write the hash to both memory and storage at the same time
+            // in order to use it in the next iteration. it is cheaper to read
+            // from memory instead of storage, so we save it here.
+            cacheEmptyValues[index] = prev = sha256(abi.encodePacked(prev, prev));
         }
     }
 
