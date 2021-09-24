@@ -3,7 +3,7 @@ pragma solidity ^0.7.0;
 
 contract Spt {
     bytes public emptyElement;
-    mapping(uint256 => bytes32) public cacheEmptyValues; // can be a dynamic array
+    mapping(uint256 => bytes32) public cacheEmptyValues;
 
     uint public depth;
     uint public maxElements;
