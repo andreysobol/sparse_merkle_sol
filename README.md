@@ -63,7 +63,7 @@ Min:
 Max: 
 319329
 
-Remove
+REMOVE
 Median: 
 99561
 Average: 

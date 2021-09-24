@@ -25,7 +25,7 @@ def main():
     print("Max: ")
     print(max(gas_used_add))
     print("")
-    print("Remove")
+    print("REMOVE")
     print("Median: ")
     print(sorted(gas_used_remove)[512])
     print("Average: ")
