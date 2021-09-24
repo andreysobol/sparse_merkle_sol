@@ -1,10 +1,10 @@
 # Sparse merkle tree in solidity
 
-Optimised Sparse merkle tree writen in solidity.
+Optimised sparse merkle tree writen in solidity.
 
 Key features:
-- Size adjustments (function ```increaseDepth``` and ```decreaseDepth```)
-- Update elemnts - ```O(log N)```
+- Size adjustments (function `increaseDepth` and `decreaseDepth`)
+- Update elemnts - `O(log N)`
 
 ## Instalation
 
