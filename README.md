@@ -80,4 +80,4 @@ Generate nice image:
 python diagram.py
 ```
 
-![Gas usage](./plot.png){:width="2000px"}
+![Gas usage](./plot.png)
