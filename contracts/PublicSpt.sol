@@ -18,8 +18,8 @@ contract PublicSpt is Spt {
         super.decreaseDepth(depthDifference);
     }
 
-    function _modifyHashedElement(uint index, bytes32 hashedElement) public {
-        super.modifyHashedElement(index, hashedElement);
+    function _modifyHash(uint index, bytes32 hashedElement) public {
+        super.modifyHash(index, hashedElement);
     }
 
     function _modifyElement(uint index, bytes calldata element) public {

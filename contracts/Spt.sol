@@ -98,7 +98,7 @@ contract Spt {
         tree[level][i] = sha256(abi.encodePacked(v0, v1));
     }
 
-    function modifyHashedElement(uint index, bytes32 hashedElement) internal {
+    function modifyHash(uint index, bytes32 hashedElement) internal {
         require(index < maxElements, "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint level = 1; level <= depth; level++) {
@@ -111,7 +111,7 @@ contract Spt {
     function modifyElement(uint index, bytes calldata data) internal {
         elementData[index] = data;
         bytes32 hashedElement = sha256(data);
-        modifyHashedElement(index, hashedElement);
+        modifyHash(index, hashedElement);
     }
 
     function addElement(uint index, bytes calldata data) internal {
@@ -122,6 +122,6 @@ contract Spt {
     function removeElement(uint index) internal {
         require(elementData[index].length != 0, "Can't remove empty element");
         delete elementData[index];
-        modifyHashedElement(index, EMPTY_LEAF);
+        modifyHash(index, EMPTY_LEAF);
     }
 }
