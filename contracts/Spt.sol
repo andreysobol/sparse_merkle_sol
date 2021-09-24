@@ -19,7 +19,7 @@ contract Spt {
         calculateEmptyLeafHash(0, _depth);
     }
 
-    function setupDepth(uint _depth) internal {
+    function setupDepth(uint _depth) private {
         depth = _depth;
         maxElements = 2**depth;
     }
@@ -58,7 +58,7 @@ contract Spt {
         }
     }
 
-    function calculateEmptyLeafHash(uint fromLevel, uint toLevel) internal {
+    function calculateEmptyLeafHash(uint fromLevel, uint toLevel) private {
         bytes32 prev;
         if (fromLevel == 0) {
             cacheEmptyValues[0] = prev = sha256("");
@@ -75,7 +75,7 @@ contract Spt {
         }
     }
 
-    function updateLeaf(uint level, uint i) internal {
+    function updateLeaf(uint level, uint i) private {
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
@@ -98,7 +98,7 @@ contract Spt {
         tree[level][i] = sha256(abi.encodePacked(v0, v1));
     }
 
-    function modifyHash(uint index, bytes32 hashedElement) internal {
+    function modifyHash(uint index, bytes32 hashedElement) private {
         require(index < maxElements, "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint level = 1; level <= depth; level++) {
