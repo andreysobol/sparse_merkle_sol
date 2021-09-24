@@ -11,7 +11,7 @@ contract Spt {
     mapping(uint256 => mapping(uint256 => bytes32)) public tree;
     mapping(uint256 => bytes) public elementData; 
 
-    bytes32 constant internal emptyLeaf = 0x00;
+    bytes32 constant internal EMPTY_LEAF = 0x00;
 
     constructor(uint _depth) {
         assert(_depth > 0);
@@ -47,13 +47,13 @@ contract Spt {
 
         uint checkIndex = 1;
         for (uint level = newDepth; level < oldDepth; level++) {
-            assert(tree[level][checkIndex] == 0x00);
+            assert(tree[level][checkIndex] == EMPTY_LEAF);
         }
         setupDepth(newDepth);
     }
 
     function getRoot() public view returns (bytes32) {
-        if (tree[depth][0] == 0x00) {
+        if (tree[depth][0] == EMPTY_LEAF) {
             return cacheEmptyValues[depth];
         } else {
             return tree[depth][0];
@@ -61,7 +61,7 @@ contract Spt {
     }
 
     function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
-        if (cacheEmptyValues[level] != 0x00) {
+        if (cacheEmptyValues[level] != EMPTY_LEAF) {
             return cacheEmptyValues[level];
         }
 
@@ -83,16 +83,16 @@ contract Spt {
         bytes32 v0 = tree[level][i0];
         bytes32 v1 = tree[level][i1];
 
-        if ((v0 == 0) && (v1 == 0)) {
+        if ((v0 == EMPTY_LEAF) && (v1 == EMPTY_LEAF)) {
             delete tree[level+1][i];
             return;
         }
 
-        if (v0 == 0) {
+        if (v0 == EMPTY_LEAF) {
             v0 = cacheEmptyValues[level];
         }
 
-        if (v1 == 0) {
+        if (v1 == EMPTY_LEAF) {
             v1 = cacheEmptyValues[level];
         }
 
@@ -100,7 +100,7 @@ contract Spt {
     }
 
     function modifyHashedElement(uint index, bytes32 hashedElement) internal {
-        require(index < maxElements && index >= 0, "Index out of bounds");
+        require(index < maxElements, "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint level = 0; level < depth; level++) {
             uint currentIndex = index / (2**(level+1));
@@ -122,6 +122,6 @@ contract Spt {
     function removeElement(uint index) internal {
         require(elementData[index].length != 0, "Can't remove already empty element");
         delete elementData[index];
-        modifyHashedElement(index, 0x00);
+        modifyHashedElement(index, EMPTY_LEAF);
     }
 }
