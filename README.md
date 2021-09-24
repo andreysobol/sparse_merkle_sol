@@ -73,3 +73,11 @@ Min:
 Max: 
 107658
 ```
+
+Generate nice image:
+
+```
+python diagram.py
+```
+
+![Gas usage](./plot.png)
