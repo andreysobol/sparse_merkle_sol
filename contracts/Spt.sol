@@ -25,10 +25,10 @@ contract Spt {
         maxElements = 2**depth;
     }
 
-    function increaseDepth(uint amountOfLevel) internal {
-        assert(amountOfLevel > 0);
+    function increaseDepth(uint depthDifference) internal {
+        assert(depthDifference > 0);
         uint oldDepth = depth;
-        uint newDepth = depth + amountOfLevel;
+        uint newDepth = oldDepth + depthDifference;
 
         calculateEmptyLeafHash(newDepth);
 
@@ -39,10 +39,10 @@ contract Spt {
         setupDepth(newDepth);
     }
 
-    function decreaseDepth(uint amountOfLevel) internal {
+    function decreaseDepth(uint depthDifference) internal {
         uint oldDepth = depth;
-        uint newDepth = depth - amountOfLevel;
-        assert(amountOfLevel > 0);
+        uint newDepth = oldDepth - depthDifference;
+        assert(depthDifference > 0);
         assert(newDepth > 0);
 
         uint checkIndex = 1;

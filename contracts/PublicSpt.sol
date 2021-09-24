@@ -10,12 +10,12 @@ contract PublicSpt is Spt {
         super.setupDepth(depth);
     }
 
-    function _increaseDepth(uint amountOfLevel) public {
-        super.increaseDepth(amountOfLevel);
+    function _increaseDepth(uint depthDifference) public {
+        super.increaseDepth(depthDifference);
     }
 
-    function _decreaseDepth(uint amountOfLevel) public {
-        super.decreaseDepth(amountOfLevel);
+    function _decreaseDepth(uint depthDifference) public {
+        super.decreaseDepth(depthDifference);
     }
 
     function _modifyHashedElement(uint index, bytes32 hashedElement) public {
