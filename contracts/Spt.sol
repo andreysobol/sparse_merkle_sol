@@ -2,7 +2,6 @@
 pragma solidity ^0.7.0;
 
 contract Spt {
-    bytes public emptyElement;
     mapping(uint256 => bytes32) public cacheEmptyValues;
 
     uint public depth;
@@ -65,7 +64,7 @@ contract Spt {
         }
 
         if (level == 0) {
-            cacheEmptyValues[level] = sha256(emptyElement);
+            cacheEmptyValues[level] = sha256("");
         } else {
             bytes32 prev = calculateEmptyLeafHash(level - 1);
             cacheEmptyValues[level] = sha256(abi.encodePacked(prev, prev));
