@@ -65,14 +65,11 @@ contract Spt {
             cacheEmptyValues[0] = sha256("");
         }
 
-        uint emptyIndex = level;
-        while (cacheEmptyValues[emptyIndex] == EMPTY_LEAF) {
-            emptyIndex -= 1;
-        }
-
-        for (uint index = emptyIndex+1; index <= level; index+=1) {
-            bytes32 prev = cacheEmptyValues[index-1];
-            cacheEmptyValues[index] = sha256(abi.encodePacked(prev, prev));
+        for (uint index = 1; index <= level; index += 1) {
+            if (cacheEmptyValues[index] == EMPTY_LEAF) {
+                bytes32 prev = cacheEmptyValues[index-1];
+                cacheEmptyValues[index] = sha256(abi.encodePacked(prev, prev));
+            }
         }
     }
 
