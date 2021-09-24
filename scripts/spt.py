@@ -12,7 +12,7 @@ def main():
 
     print("Median: ")
     print(sorted(gas_used)[512])
-    print("Av: ")
+    print("Average: ")
     print(sum(gas_used)/1024)
     print("Min: ")
     print(min(gas_used))
