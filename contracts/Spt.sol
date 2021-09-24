@@ -32,7 +32,7 @@ contract Spt {
 
         calculateEmptyLeafHash(oldDepth+1, newDepth);
 
-        for (uint level = oldDepth; level < newDepth; level++) {
+        for (uint level = oldDepth+1; level <= newDepth; level++) {
             calculateAndUpdateLeaf(level, 0);
         }
         setupDepth(newDepth);
