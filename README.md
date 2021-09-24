@@ -49,3 +49,27 @@ brownie test
 ```
 brownie run spt
 ```
+
+Result (depth = `10`)
+
+```
+ADD
+Median: 
+176379
+Average: 
+179905.3046875
+Min: 
+160493
+Max: 
+319329
+
+Remove
+Median: 
+99561
+Average: 
+90149.416015625
+Min: 
+57457
+Max: 
+107658
+```
