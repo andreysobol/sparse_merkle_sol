@@ -15,6 +15,6 @@ def main():
     print("Av: ")
     print(sum(gas_used)/1024)
     print("Min: ")
-    print(sorted(gas_used)[0])
+    print(min(gas_used))
     print("Max: ")
-    print(sorted(gas_used)[1023])
+    print(max(gas_used))
