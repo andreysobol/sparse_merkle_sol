@@ -74,7 +74,7 @@ contract Spt {
         return cacheEmptyValues[level];
     }
 
-    function calculateLeaf(uint level, uint i) internal returns (bytes32) {
+    function calculateLeaf(uint level, uint i) public view returns (bytes32) {
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
