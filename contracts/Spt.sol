@@ -11,6 +11,8 @@ contract Spt {
     mapping(uint256 => mapping(uint256 => bytes32)) public tree;
     mapping(uint256 => bytes) public elementData; 
 
+    bytes32 constant internal emptyLeaf = 0x00;
+
     constructor(uint _depth) {
         assert(_depth > 0);
         setupDepth(_depth);
@@ -73,7 +75,8 @@ contract Spt {
         return cacheEmptyValues[level];
     }
 
-    function calculateLeaf(uint level, uint i) public view returns (bytes32) {
+    function calculateAndUpdateLeaf(uint level, uint i) internal {
+
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
@@ -81,7 +84,8 @@ contract Spt {
         bytes32 v1 = tree[level][i1];
 
         if ((v0 == 0) && (v1 == 0)) {
-            return 0x00;
+            delete tree[level+1][i];
+            return;
         }
 
         if (v0 == 0) {
@@ -92,11 +96,7 @@ contract Spt {
             v1 = cacheEmptyValues[level];
         }
 
-        return sha256(abi.encodePacked(v0, v1));
-    }
-
-    function calculateAndUpdateLeaf(uint level, uint i) internal {
-        tree[level+1][i] = calculateLeaf(level, i);
+        tree[level+1][i] = sha256(abi.encodePacked(v0, v1));
     }
 
     function modifyHashedElement(uint index, bytes32 hashedElement) internal {
