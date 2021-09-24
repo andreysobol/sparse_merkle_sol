@@ -3,21 +3,18 @@
 from brownie import PublicSpt, accounts
 
 def main():
-    tree = PublicSpt.deploy(2, {"from": accounts[0]})
+    tree = PublicSpt.deploy(10, {"from": accounts[0]})
 
-    tree._modifyElement(0, b'apple')
-    elements = [b''] * 4
-    elements[0] = b'apple'
+    gas_used = []
+    for item in range(0, 1024):
+        tx = tree._modifyElement(item, b'apple')
+        gas_used.append(tx.gas_used)
 
-    print('level 0')
-    for i in range(4):
-        print(tree.tree(0, i))
-
-    print('level 1')
-    for i in range(2):
-        print(tree.tree(1, i))
-
-    print('level 2')
-    for i in range(1):
-        print(tree.tree(2, i))
-    # assert '0x' + root.hex() == tree.getRoot()
+    print("Median: ")
+    print(sorted(gas_used)[512])
+    print("Av: ")
+    print(sum(gas_used)/1024)
+    print("Min: ")
+    print(sorted(gas_used)[0])
+    print("Max: ")
+    print(sorted(gas_used)[1023])
