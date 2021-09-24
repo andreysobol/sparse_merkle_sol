@@ -60,19 +60,20 @@ contract Spt {
         }
     }
 
-    function calculateEmptyLeafHash(uint level) internal returns (bytes32) {
-        if (cacheEmptyValues[level] != EMPTY_LEAF) {
-            return cacheEmptyValues[level];
+    function calculateEmptyLeafHash(uint level) internal {
+        if (cacheEmptyValues[0] == EMPTY_LEAF) {
+            cacheEmptyValues[0] = sha256("");
         }
 
-        if (level == 0) {
-            cacheEmptyValues[level] = sha256("");
-        } else {
-            bytes32 prev = calculateEmptyLeafHash(level - 1);
-            cacheEmptyValues[level] = sha256(abi.encodePacked(prev, prev));
+        uint emptyIndex = level;
+        while (cacheEmptyValues[emptyIndex] == EMPTY_LEAF) {
+            emptyIndex -= 1;
         }
 
-        return cacheEmptyValues[level];
+        for (uint index = emptyIndex+1; index <= level; index+=1) {
+            bytes32 prev = cacheEmptyValues[index-1];
+            cacheEmptyValues[index] = sha256(abi.encodePacked(prev, prev));
+        }
     }
 
     function calculateAndUpdateLeaf(uint level, uint i) internal {
