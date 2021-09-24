@@ -80,30 +80,31 @@ contract Spt {
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
-        bytes32 v0 = tree[level][i0];
-        bytes32 v1 = tree[level][i1];
+        bytes32 v0 = tree[level-1][i0];
+        bytes32 v1 = tree[level-1][i1];
 
         if ((v0 == EMPTY_LEAF) && (v1 == EMPTY_LEAF)) {
-            delete tree[level+1][i];
+            delete tree[level][i];
             return;
         }
 
         if (v0 == EMPTY_LEAF) {
-            v0 = cacheEmptyValues[level];
+            v0 = cacheEmptyValues[level-1];
         }
 
         if (v1 == EMPTY_LEAF) {
-            v1 = cacheEmptyValues[level];
+            v1 = cacheEmptyValues[level-1];
         }
 
-        tree[level+1][i] = sha256(abi.encodePacked(v0, v1));
+        tree[level][i] = sha256(abi.encodePacked(v0, v1));
     }
 
     function modifyHashedElement(uint index, bytes32 hashedElement) internal {
         require(index < maxElements, "Index out of bounds");
         tree[0][index] = hashedElement;
-        for (uint level = 0; level < depth; level++) {
-            uint currentIndex = index / (2**(level+1));
+        for (uint level = 1; level <= depth; level++) {
+            // 1<<level == 2**level
+            uint currentIndex = index / (1<<level);
             calculateAndUpdateLeaf(level, currentIndex);
         }
     }
