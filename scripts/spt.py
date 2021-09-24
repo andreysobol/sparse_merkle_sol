@@ -5,16 +5,33 @@ from brownie import PublicSpt, accounts
 def main():
     tree = PublicSpt.deploy(10, {"from": accounts[0]})
 
-    gas_used = []
+    gas_used_add = []
     for item in range(0, 1024):
-        tx = tree._modifyElement(item, b'apple')
-        gas_used.append(tx.gas_used)
+        tx = tree._addElement(item, b'apple')
+        gas_used_add.append(tx.gas_used)
 
+    print("ADD")
     print("Median: ")
-    print(sorted(gas_used)[512])
+    print(sorted(gas_used_add)[512])
     print("Average: ")
-    print(sum(gas_used)/1024)
+    print(sum(gas_used_add)/1024)
     print("Min: ")
-    print(min(gas_used))
+    print(min(gas_used_add))
     print("Max: ")
-    print(max(gas_used))
+    print(max(gas_used_add))
+    print("")
+
+    gas_used_remove = []
+    for item in range(0, 1024):
+        tx = tree._removeElement(item, b'apple')
+        gas_used_remove.append(tx.gas_used)
+
+    print("Remove")
+    print("Median: ")
+    print(sorted(gas_used_remove)[512])
+    print("Average: ")
+    print(sum(gas_used_remove)/1024)
+    print("Min: ")
+    print(min(gas_used_remove))
+    print("Max: ")
+    print(max(gas_used_remove))
