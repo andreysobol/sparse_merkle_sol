@@ -44,9 +44,8 @@ contract Spt {
         require(depthDifference < oldDepth, "Overflow protection");
         uint newDepth = oldDepth - depthDifference;
 
-        uint checkIndex = 1;
         for (uint level = newDepth; level < oldDepth; level++) {
-            require(tree[level][checkIndex] == EMPTY_LEAF, "Subtree must be empty");
+            require(tree[level][1] == EMPTY_LEAF, "Subtree must be empty");
         }
         setupDepth(newDepth);
     }
