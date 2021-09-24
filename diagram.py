@@ -13,6 +13,7 @@ def create_plot(gas_used_add, gas_used_remove):
 
     # plot the data
     fig = plt.figure()
+    fig.set_size_inches(10, 7)
     ax = fig.add_subplot(1, 1, 1)
 
 
