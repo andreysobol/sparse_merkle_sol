@@ -33,7 +33,7 @@ contract Spt {
         calculateEmptyLeafHash(oldDepth+1, newDepth);
 
         for (uint level = oldDepth+1; level <= newDepth; level++) {
-            calculateAndUpdateLeaf(level, 0);
+            updateLeaf(level, 0);
         }
         setupDepth(newDepth);
     }
@@ -75,7 +75,7 @@ contract Spt {
         }
     }
 
-    function calculateAndUpdateLeaf(uint level, uint i) internal {
+    function updateLeaf(uint level, uint i) internal {
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
@@ -104,7 +104,7 @@ contract Spt {
         for (uint level = 1; level <= depth; level++) {
             // 1<<level == 2**level
             uint currentIndex = index / (1<<level);
-            calculateAndUpdateLeaf(level, currentIndex);
+            updateLeaf(level, currentIndex);
         }
     }
 
