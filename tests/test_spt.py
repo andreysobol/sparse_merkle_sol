@@ -85,7 +85,7 @@ def test_remove_empty(public_spt, accounts):
         tx = spt._removeElement(1)
     except Exception as e:
         reverted = True
-        assert "Can't remove already empty element" in e.message
+        assert "Can't remove empty element" in e.message
 
     assert reverted
 

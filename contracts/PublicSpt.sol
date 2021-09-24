@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
-import './Spt.sol';
+import "./Spt.sol";
 
 contract PublicSpt is Spt {
-    constructor(uint _depth) Spt(_depth) {}
+    constructor(uint _depth) Spt(_depth) public {}
 
     function _setupDepth(uint depth) public {
         super.setupDepth(depth);

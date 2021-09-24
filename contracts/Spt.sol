@@ -13,7 +13,7 @@ contract Spt {
 
     bytes32 constant internal EMPTY_LEAF = 0x00;
 
-    constructor(uint _depth) {
+    constructor(uint _depth) public {
         require(_depth > 0, "Depth must be non-zero");
         setupDepth(_depth);
         calculateEmptyLeafHash(0, _depth);
@@ -121,7 +121,7 @@ contract Spt {
     }
 
     function removeElement(uint index) internal {
-        require(elementData[index].length != 0, "Can't remove already empty element");
+        require(elementData[index].length != 0, "Can't remove empty element");
         delete elementData[index];
         modifyHashedElement(index, EMPTY_LEAF);
     }
