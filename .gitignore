@@ -6,3 +6,5 @@ reports/
 env
 .solhint.json
 raw_data.json
+raw_data_sha.json
+raw_data_keccak.json

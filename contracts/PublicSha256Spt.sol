@@ -3,7 +3,7 @@ pragma solidity ^0.7.0;
 
 import "./Sha256Spt.sol";
 
-contract PublicSpt is Sha256Spt {
+contract PublicSha256Spt is Sha256Spt {
     constructor(uint _depth) Sha256Spt(_depth) public {}
 
     function _increaseDepth(uint depthDifference) public {

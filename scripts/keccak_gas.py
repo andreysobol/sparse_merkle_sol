@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from brownie import PublicSpt, accounts
+from brownie import PublicKeccak256Spt, accounts
 
 def main():
-    tree = PublicSpt.deploy(10, {"from": accounts[0]})
+    tree = PublicKeccak256Spt.deploy(10, {"from": accounts[0]})
 
     gas_used_add = []
     for item in range(0, 1024):
@@ -41,5 +41,5 @@ def main():
     }
 
     import json
-    with open('raw_data.json', 'w') as f:
+    with open('raw_data_keccak.json', 'w') as f:
         json.dump(kv, f)

@@ -49,7 +49,7 @@ brownie test
 ### sha256
 
 ```
-brownie run spt
+brownie run sha_gas
 ```
 
 Result (depth = `10`)
@@ -79,7 +79,7 @@ Max:
 ### keccak256
 
 ```
-brownie run spt
+brownie run keccak_gas
 ```
 
 Result (depth = `10`)
