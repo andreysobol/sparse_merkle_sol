@@ -2,6 +2,10 @@
 pragma solidity ^0.7.0;
 
 contract Spt {
+    // because maxElements = 2**depth, so 256 will overflow
+    uint constant MAX_DEPTH = 255;
+    bytes32 constant internal EMPTY_LEAF = 0x00;
+
     mapping(uint256 => bytes32) public cacheEmptyValues;
 
     uint public depth;
@@ -11,23 +15,23 @@ contract Spt {
     mapping(uint256 => mapping(uint256 => bytes32)) public tree;
     mapping(uint256 => bytes) public elementData; 
 
-    bytes32 constant internal EMPTY_LEAF = 0x00;
-
     constructor(uint _depth) public {
         require(_depth > 0, "Depth must be non-zero");
+        require(_depth <= MAX_DEPTH, "Overflow protection");
         setupDepth(_depth);
         calculateEmptyLeafHash(0, _depth);
     }
 
     function setupDepth(uint _depth) private {
         depth = _depth;
-        maxElements = 2**depth;
+        // 1<<depth == 2**depth
+        maxElements = 1<<depth;
     }
 
     function increaseDepth(uint depthDifference) internal {
         require(depthDifference > 0, "depthDifference must be non-zero");
         uint oldDepth = depth;
-        require(depthDifference < uint256(-1) - oldDepth, "Overflow protection");
+        require(depthDifference <= MAX_DEPTH - oldDepth, "Overflow protection");
         uint newDepth = oldDepth + depthDifference;
 
         calculateEmptyLeafHash(oldDepth+1, newDepth);
