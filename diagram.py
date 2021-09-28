@@ -15,6 +15,8 @@ def create_plot(gas_used_add, gas_used_remove):
     fig = plt.figure()
     fig.set_size_inches(10, 7)
     ax = fig.add_subplot(1, 1, 1)
+    ax.set_ylabel("gas")
+    ax.set_xlabel("update index")
 
 
     ax.plot(xdata1, ydata1, color='tab:blue', marker='o', markersize=1, linewidth = 0.0)
