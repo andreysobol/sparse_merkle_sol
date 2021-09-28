@@ -55,23 +55,23 @@ Result (depth = `10`)
 ```
 ADD
 Median: 
-176379
+177120
 Average: 
-179905.3046875
+180646.3046875
 Min: 
-160493
+161234
 Max: 
-319329
+320070
 
 REMOVE
 Median: 
-99561
+99961
 Average: 
-90149.416015625
+90494.435546875
 Min: 
 57457
 Max: 
-107658
+108058
 ```
 
 Generate nice image:
