@@ -106,6 +106,8 @@ Max:
 95969
 ```
 
+### diagram
+
 Generate nice image:
 
 ```
