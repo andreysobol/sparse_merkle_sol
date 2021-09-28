@@ -1,4 +1,4 @@
-from brownie import PublicSpt, accounts
+from brownie import PublicSha256Spt, accounts
 from hashlib import sha256
 
 import pytest
@@ -18,7 +18,7 @@ def test_setup_depth(public_spt, accounts):
 
 def test_empty_roots(public_spt, accounts):
     check_size = range(1, 15)
-    trees = { i: PublicSpt.deploy(i, {"from": accounts[0]}) for i in check_size }
+    trees = { i: PublicSha256Spt.deploy(i, {"from": accounts[0]}) for i in check_size }
     empty_hash = sha256(b'').digest()
     for i in check_size:
         empty_hash = sha256(empty_hash * 2).digest()
@@ -26,7 +26,7 @@ def test_empty_roots(public_spt, accounts):
 
 def test_one_element(public_spt, accounts):
 
-    trees = [PublicSpt.deploy(2, {"from": accounts[0]}) for i in range(4)]
+    trees = [PublicSha256Spt.deploy(2, {"from": accounts[0]}) for i in range(4)]
 
     for i in range(4):
         trees[i]._modifyElement(i, b'apple')
@@ -36,7 +36,7 @@ def test_one_element(public_spt, accounts):
         assert root == trees[i].getRoot()
 
 def test_step_by_step(public_spt, accounts):
-    spt = PublicSpt.deploy(2, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(2, {"from": accounts[0]})
 
     spt._modifyElement(0, b'apple')
     root = spt.getRoot()
@@ -59,7 +59,7 @@ def test_step_by_step(public_spt, accounts):
     assert root == test_result
 
 def test_remove(public_spt, accounts):
-    spt = PublicSpt.deploy(2, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(2, {"from": accounts[0]})
 
     spt._modifyElement(1, b'fish')
     root = spt.getRoot()
@@ -78,7 +78,7 @@ def test_remove(public_spt, accounts):
 
 
 def test_remove_empty(public_spt, accounts):
-    spt = PublicSpt.deploy(2, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(2, {"from": accounts[0]})
     reverted = False
 
     try:
@@ -90,7 +90,7 @@ def test_remove_empty(public_spt, accounts):
     assert reverted
 
 def test_add_existing(public_spt, accounts):
-    spt = PublicSpt.deploy(2, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(2, {"from": accounts[0]})
     reverted = False
 
     spt._addElement(1, b'apple')
@@ -104,7 +104,7 @@ def test_add_existing(public_spt, accounts):
     assert reverted
 
 def test_incorrect_index(public_spt, accounts):
-    spt = PublicSpt.deploy(2, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(2, {"from": accounts[0]})
     reverted = False
 
     try:
@@ -116,7 +116,7 @@ def test_incorrect_index(public_spt, accounts):
     assert reverted
 
 def test_increase_depth(public_spt, accounts):
-    spt = PublicSpt.deploy(1, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(1, {"from": accounts[0]})
     
     spt._addElement(0, b'apple')
     spt._addElement(1, b'banana')
@@ -127,7 +127,7 @@ def test_increase_depth(public_spt, accounts):
 
 
 def test_decrease_depth(public_spt, accounts):
-    spt = PublicSpt.deploy(3, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(3, {"from": accounts[0]})
     
     spt._addElement(0, b'apple')
     spt._addElement(2, b'banana')
@@ -138,7 +138,7 @@ def test_decrease_depth(public_spt, accounts):
 
 
 def test_decrease_non_empty(public_spt, accounts):
-    spt = PublicSpt.deploy(3, {"from": accounts[0]})
+    spt = PublicSha256Spt.deploy(3, {"from": accounts[0]})
 
     tx = spt._addElement(2, b'banana')
     tx = spt._addElement(5, b'super banana')
