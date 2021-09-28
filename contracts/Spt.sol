@@ -131,5 +131,6 @@ abstract contract Spt {
         modifyHash(index, EMPTY_LEAF);
     }
 
+    // don't use abstract method in production. +7% gas
     function hash(bytes memory data) virtual internal returns (bytes32);
 }
