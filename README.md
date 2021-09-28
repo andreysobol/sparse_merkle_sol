@@ -46,6 +46,8 @@ brownie test
 
 ## Gas usage
 
+### sha256
+
 ```
 brownie run spt
 ```
@@ -72,6 +74,36 @@ Min:
 57457
 Max: 
 108058
+```
+
+### keccak256
+
+```
+brownie run spt
+```
+
+Result (depth = `10`)
+
+```
+ADD
+Median: 
+163993
+Average: 
+167519.3046875
+Min: 
+148107
+Max: 
+306943
+
+REMOVE
+Median: 
+87872
+Average: 
+80080.4873046875
+Min: 
+57457
+Max: 
+95969
 ```
 
 Generate nice image:
