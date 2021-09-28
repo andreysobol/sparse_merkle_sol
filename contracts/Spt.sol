@@ -15,7 +15,7 @@ abstract contract Spt {
     mapping(uint256 => mapping(uint256 => bytes32)) public tree;
     mapping(uint256 => bytes) public elementData; 
 
-    constructor(uint _depth) internal {
+    constructor(uint _depth) {
         require(_depth > 0, "Depth must be non-zero");
         require(_depth <= MAX_DEPTH, "Overflow protection");
         setupDepth(_depth);
