@@ -108,8 +108,8 @@ abstract contract Spt {
         require(index < maxElements, "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint level = 1; level <= depth; level++) {
-            // 1<<level == 2**level
-            uint currentIndex = index / (1<<level);
+            // index >> level == index / 2**level
+            uint currentIndex = index >> level;
             updateLeaf(level, currentIndex);
         }
     }
