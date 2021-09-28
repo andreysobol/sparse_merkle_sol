@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from brownie import PublicSpt, accounts
+from brownie import PublicSha256Spt, accounts
 
 def main():
-    tree = PublicSpt.deploy(10, {"from": accounts[0]})
+    tree = PublicSha256Spt.deploy(10, {"from": accounts[0]})
 
     gas_used_add = []
     for item in range(0, 1024):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from brownie import PublicSpt, accounts
+from brownie import PublicSha256Spt, accounts
 
 def main():
-    tree = PublicSpt.deploy(40, {"from": accounts[0]})
+    tree = PublicSha256Spt.deploy(40, {"from": accounts[0]})
 
