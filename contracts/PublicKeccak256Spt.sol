@@ -3,7 +3,7 @@ pragma solidity ^0.7.0;
 
 import "./Keccak256Spt.sol";
 
-contract PublicSpt is Keccak256Spt {
+contract PublicKeccak256Spt is Keccak256Spt{
     constructor(uint _depth) Keccak256Spt(_depth) public {}
 
     function _increaseDepth(uint depthDifference) public {
