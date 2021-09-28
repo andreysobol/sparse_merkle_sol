@@ -36,7 +36,7 @@ def create_plot(gas_used_add_sha, gas_used_remove_sha, gas_used_add_keccak, gas_
     ax.set_xlim([0, 1024])
     ax.set_ylim([0, 400000])
 
-    ax.set_title('Add (blue) and Remove (orange)')
+    ax.set_title('Gas usage')
 
     # display the plot
     plt.savefig('plot.png')
