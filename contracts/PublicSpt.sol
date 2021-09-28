@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
-import "./Spt.sol";
+import "./Sha256Spt.sol";
 
-contract PublicSpt is Spt {
-    constructor(uint _depth) Spt(_depth) public {}
+contract PublicSpt is Sha256Spt {
+    constructor(uint _depth) Sha256Spt(_depth) public {}
 
     function _increaseDepth(uint depthDifference) public {
         super.increaseDepth(depthDifference);

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
-contract Spt {
+abstract contract Spt {
     // because maxElements = 2**depth, so 256 will overflow
     uint constant MAX_DEPTH = 255;
     bytes32 constant internal EMPTY_LEAF = 0x00;
@@ -15,7 +15,7 @@ contract Spt {
     mapping(uint256 => mapping(uint256 => bytes32)) public tree;
     mapping(uint256 => bytes) public elementData; 
 
-    constructor(uint _depth) public {
+    constructor(uint _depth) internal {
         require(_depth > 0, "Depth must be non-zero");
         require(_depth <= MAX_DEPTH, "Overflow protection");
         setupDepth(_depth);
@@ -65,7 +65,7 @@ contract Spt {
     function calculateEmptyLeafHash(uint fromLevel, uint toLevel) private {
         bytes32 prev;
         if (fromLevel == 0) {
-            cacheEmptyValues[0] = prev = sha256("");
+            cacheEmptyValues[0] = prev = hash("");
             fromLevel = 1;
         } else {
             prev = cacheEmptyValues[fromLevel-1];
@@ -75,13 +75,13 @@ contract Spt {
             // we write the hash to both memory and storage at the same time
             // in order to use it in the next iteration. it is cheaper to read
             // from memory instead of storage, so we save it here.
-            cacheEmptyValues[index] = prev = sha256(abi.encodePacked(prev, prev));
+            cacheEmptyValues[index] = prev = hash(abi.encodePacked(prev, prev));
         }
     }
 
     function updateLeaf(uint level, uint i) private {
         // level MUST be > 0
-        
+
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
@@ -101,7 +101,7 @@ contract Spt {
             v1 = cacheEmptyValues[level-1];
         }
 
-        tree[level][i] = sha256(abi.encodePacked(v0, v1));
+        tree[level][i] = hash(abi.encodePacked(v0, v1));
     }
 
     function modifyHash(uint index, bytes32 hashedElement) private {
@@ -116,7 +116,7 @@ contract Spt {
 
     function modifyElement(uint index, bytes calldata data) internal {
         elementData[index] = data;
-        bytes32 hashedElement = sha256(data);
+        bytes32 hashedElement = hash(data);
         modifyHash(index, hashedElement);
     }
 
@@ -130,4 +130,6 @@ contract Spt {
         delete elementData[index];
         modifyHash(index, EMPTY_LEAF);
     }
+
+    function hash(bytes memory data) virtual internal returns (bytes32);
 }
