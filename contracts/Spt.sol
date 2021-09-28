@@ -80,6 +80,8 @@ contract Spt {
     }
 
     function updateLeaf(uint level, uint i) private {
+        // level MUST be > 0
+        
         uint i0 = 2*i;
         uint i1 = 2*i+1;
 
