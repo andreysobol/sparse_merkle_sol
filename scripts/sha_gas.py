@@ -41,5 +41,5 @@ def main():
     }
 
     import json
-    with open('raw_data.json', 'w') as f:
+    with open('raw_data_sha.json', 'w') as f:
         json.dump(kv, f)
