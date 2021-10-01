@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.0;
 
-import "./Spt.sol";
+import "./Spt{{hashname}}.sol";
 
-contract PublicSpt {
+contract PublicSmt{{hashname}} {
     using SMT for SMT.MerkleTree;
     SMT.MerkleTree public tree;
 

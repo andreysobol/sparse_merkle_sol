@@ -8,3 +8,14 @@ with open("contracts/SmtSha.sol", 'w') as smt_sha:
 with open("contracts/SmtKeccak.sol", 'w') as smt_keccak:
     smt_keccak.write(contract.replace("{{hash}}", "keccak256"))
     print("contracts/SmtKeccak.sol generated")
+
+with open("contracts/PublicSmt.metasol") as p_smt:
+    public_contract = p_smt.read()
+
+with open("contracts/PublicSmtSha.sol", 'w') as p_smt_sha:
+    p_smt_sha.write(public_contract.replace("{{hashname}}", "Sha"))
+    print("contracts/PublicSmtSha.sol generated")
+
+with open("contracts/PublicSmtKeccak.sol", 'w') as p_smt_keccak:
+    p_smt_keccak.write(public_contract.replace("{{hashname}}", "Keccak"))
+    print("contracts/PublicSmtKeccak.sol generated")
