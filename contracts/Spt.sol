@@ -19,7 +19,7 @@ abstract contract Spt {
         //require(_depth <= MAX_DEPTH, "Overflow protection");
         cacheEmptyValues[0] = hash("");
         // current depth == 0
-        calculateEmptyLeafHash(_depth);
+        _calculateEmptyLeafHash(_depth);
         depth = _depth;
     }
 
@@ -34,10 +34,10 @@ abstract contract Spt {
         require(depthDifference <= MAX_DEPTH - oldDepth, "Overflow protection");
         uint8 newDepth = oldDepth + depthDifference;
 
-        calculateEmptyLeafHash(newDepth);
+        _calculateEmptyLeafHash(newDepth);
 
         for (uint8 level = oldDepth+1; level <= newDepth; level += 1) {
-            updateLeaf(level, 0);
+            _updateLeaf(level, 0);
         }
         depth = newDepth;
     }
@@ -61,7 +61,7 @@ abstract contract Spt {
         return tree[depth][0];
     }
 
-    function calculateEmptyLeafHash(uint8 toLevel) private {
+    function _calculateEmptyLeafHash(uint8 toLevel) private {
         uint8 currentDepth = depth;
         bytes32 prev = cacheEmptyValues[currentDepth];
 
@@ -73,7 +73,7 @@ abstract contract Spt {
         }
     }
 
-    function updateLeaf(uint8 level, uint i) private {
+    function _updateLeaf(uint8 level, uint i) private {
         // level MUST be > 0
 
         uint i0 = 2*i;
@@ -101,20 +101,20 @@ abstract contract Spt {
         tree[level][i] = hash(abi.encodePacked(v0, v1));
     }
 
-    function modifyHash(uint index, bytes32 hashedElement) private {
+    function _modifyHash(uint index, bytes32 hashedElement) private {
         require(index < totalElements(), "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint8 level = 1; level <= depth; level += 1) {
             // index >> level == index / 2**level
             uint currentIndex = index >> level;
-            updateLeaf(level, currentIndex);
+            _updateLeaf(level, currentIndex);
         }
     }
 
     function modifyElement(uint index, bytes calldata data) internal {
         elementData[index] = data;
         bytes32 hashedElement = hash(data);
-        modifyHash(index, hashedElement);
+        _modifyHash(index, hashedElement);
     }
 
     function addElement(uint index, bytes calldata data) internal {
@@ -128,7 +128,7 @@ abstract contract Spt {
         // If we will use:
         // elementData[index] = "";
         // We will spend much more gas
-        modifyHash(index, EMPTY_SUBTREE);
+        _modifyHash(index, EMPTY_SUBTREE);
     }
 
     // don't use abstract method in production. +7% gas
