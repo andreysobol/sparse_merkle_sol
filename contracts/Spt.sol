@@ -37,7 +37,7 @@ abstract contract Spt {
         _calculateEmptyLeafHash(newDepth);
 
         for (uint8 level = oldDepth+1; level <= newDepth; level += 1) {
-            _updateLeaf(level, 0);
+            _updateNode(level, 0);
         }
         depth = newDepth;
     }
@@ -73,7 +73,7 @@ abstract contract Spt {
         }
     }
 
-    function _updateLeaf(uint8 level, uint i) private {
+    function _updateNode(uint8 level, uint i) private {
         // level MUST be > 0
 
         uint i0 = 2*i;
@@ -107,7 +107,7 @@ abstract contract Spt {
         for (uint8 level = 1; level <= depth; level += 1) {
             // index >> level == index / 2**level
             uint currentIndex = index >> level;
-            _updateLeaf(level, currentIndex);
+            _updateNode(level, currentIndex);
         }
     }
 
