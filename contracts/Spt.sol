@@ -84,6 +84,9 @@ abstract contract Spt {
 
         if ((v0 == EMPTY_SUBTREE) && (v1 == EMPTY_SUBTREE)) {
             delete tree[level][i];
+            // If we will use:
+            // tree[level][i] = EMPTY_SUBTREE;
+            // We will spend much more gas
             return;
         }
 
@@ -122,6 +125,9 @@ abstract contract Spt {
     function removeElement(uint index) internal {
         require(elementData[index].length != 0, "Can't remove empty element");
         delete elementData[index];
+        // If we will use:
+        // elementData[index] = "";
+        // We will spend much more gas
         modifyHash(index, EMPTY_SUBTREE);
     }
 
