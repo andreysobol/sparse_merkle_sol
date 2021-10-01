@@ -18,8 +18,10 @@ abstract contract Spt {
     constructor(uint _depth) {
         require(_depth > 0, "Depth must be non-zero");
         require(_depth <= MAX_DEPTH, "Overflow protection");
+        cacheEmptyValues[0] = hash("");
+        // current depth == 0
+        calculateEmptyLeafHash(_depth);
         setupDepth(_depth);
-        calculateEmptyLeafHash(0, _depth);
     }
 
     function setupDepth(uint _depth) private {
@@ -34,7 +36,7 @@ abstract contract Spt {
         require(depthDifference <= MAX_DEPTH - oldDepth, "Overflow protection");
         uint newDepth = oldDepth + depthDifference;
 
-        calculateEmptyLeafHash(oldDepth+1, newDepth);
+        calculateEmptyLeafHash(newDepth);
 
         for (uint level = oldDepth+1; level <= newDepth; level++) {
             updateLeaf(level, 0);
@@ -61,18 +63,13 @@ abstract contract Spt {
         return tree[depth][0];
     }
 
-    function calculateEmptyLeafHash(uint fromLevel, uint toLevel) private {
-        bytes32 prev;
-        if (fromLevel == 0) {
-            cacheEmptyValues[0] = prev = hash("");
-            fromLevel = 1;
-        } else {
-            prev = cacheEmptyValues[fromLevel-1];
-        }
+    function calculateEmptyLeafHash(uint toLevel) private {
+        uint256 currentDepth = depth;
+        bytes32 prev = cacheEmptyValues[currentDepth];
 
-        for (uint index = fromLevel; index <= toLevel; index += 1) {
-            // we write the hash to both memory and storage at the same time
-            // in order to use it in the next iteration. it is cheaper to read
+        for (uint index = currentDepth+1; index <= toLevel; index += 1) {
+            // We write the hash to both memory and storage at the same time
+            // in order to use it in the next iteration. It is cheaper to read
             // from memory instead of storage, so we save it here.
             cacheEmptyValues[index] = prev = hash(abi.encodePacked(prev, prev));
         }
