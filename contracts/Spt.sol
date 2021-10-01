@@ -49,6 +49,10 @@ abstract contract Spt {
 
         for (uint8 level = newDepth; level < oldDepth; level += 1) {
             require(tree[level][1] == EMPTY_SUBTREE, "Subtree must be empty");
+            // If we will delete this:
+            // delete tree[level+1][0];
+            // delete cacheEmptyValues[level+1];
+            // refund will be smaller than gas spent :(
         }
         depth = newDepth;
     }
