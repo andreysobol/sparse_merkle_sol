@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-from brownie import PublicSmtSha, accounts
+from brownie import PublicSmtSha, SMTSha, accounts
 
 def main():
+    ss = SMTSha.deploy({"from": accounts[0]})
     tree = PublicSmtSha.deploy(10, {"from": accounts[0]})
 
     gas_used_add = []

@@ -1,4 +1,4 @@
-from brownie import PublicSmtSha, accounts
+from brownie import PublicSmtSha, SMTSha, accounts
 from hashlib import sha256
 
 import pytest

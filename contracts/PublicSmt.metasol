@@ -31,7 +31,7 @@ contract PublicSmt{{hashname}} {
         tree.removeElement(index);
     }
 
-    function _getRoot() public {
-        tree.getRoot();
+    function _getRoot() public view returns (bytes32) {
+        return tree.getRoot();
     }
 }

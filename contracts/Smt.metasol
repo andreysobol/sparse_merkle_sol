@@ -24,7 +24,7 @@ library SMT{{hashname}} {
         tree.depth = _depth;
     }
 
-    function totalElements(MerkleTree storage tree) public view returns (uint256) {
+    function totalElements(MerkleTree storage tree) internal view returns (uint256) {
         // 1<<depth == 2**depth
         return 1<<tree.depth;
     }
@@ -59,7 +59,7 @@ library SMT{{hashname}} {
         tree.depth = newDepth;
     }
 
-    function getRoot(MerkleTree storage tree) public view returns (bytes32) {
+    function getRoot(MerkleTree storage tree) internal view returns (bytes32) {
         if (tree.tree[tree.depth][0] == EMPTY_SUBTREE) {
             return tree.cacheEmptyValues[tree.depth];
         }

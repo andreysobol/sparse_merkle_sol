@@ -6,4 +6,5 @@ def isolate(fn_isolation):
 
 @pytest.fixture(scope="module")
 def public_spt(PublicSmtSha, accounts):
+    #SMTSha.deploy({"from": accounts[0]})
     return PublicSmtSha.deploy(1, {'from': accounts[0]})
