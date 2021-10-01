@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from brownie import PublicKeccak256Spt, accounts
+from brownie import PublicSpt, accounts
 
 def main():
-    tree = PublicKeccak256Spt.deploy(10, {"from": accounts[0]})
+    tree = PublicSpt.deploy(10, {"from": accounts[0]})
 
     gas_used_add = []
     for item in range(0, 1024):
