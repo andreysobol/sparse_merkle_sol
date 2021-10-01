@@ -3,20 +3,20 @@ pragma solidity ^0.7.0;
 
 abstract contract Spt {
     // because maxElements = 2**depth, so 256 will overflow
-    uint constant MAX_DEPTH = 255;
+    uint8 constant MAX_DEPTH = 255;
     bytes32 constant internal EMPTY_LEAF = 0x00;
 
     mapping(uint256 => bytes32) public cacheEmptyValues;
 
-    uint public depth;
+    uint8 public depth;
 
     // tree level => index inside level => element hash
     mapping(uint256 => mapping(uint256 => bytes32)) public tree;
     mapping(uint256 => bytes) public elementData; 
 
-    constructor(uint _depth) {
+    constructor(uint8 _depth) {
         require(_depth > 0, "Depth must be non-zero");
-        require(_depth <= MAX_DEPTH, "Overflow protection");
+        //require(_depth <= MAX_DEPTH, "Overflow protection");
         cacheEmptyValues[0] = hash("");
         // current depth == 0
         calculateEmptyLeafHash(_depth);
@@ -28,27 +28,27 @@ abstract contract Spt {
         return 1<<depth;
     }
 
-    function increaseDepth(uint depthDifference) internal {
+    function increaseDepth(uint8 depthDifference) internal {
         require(depthDifference > 0, "depthDifference must be non-zero");
-        uint oldDepth = depth;
+        uint8 oldDepth = depth;
         require(depthDifference <= MAX_DEPTH - oldDepth, "Overflow protection");
-        uint newDepth = oldDepth + depthDifference;
+        uint8 newDepth = oldDepth + depthDifference;
 
         calculateEmptyLeafHash(newDepth);
 
-        for (uint level = oldDepth+1; level <= newDepth; level++) {
+        for (uint8 level = oldDepth+1; level <= newDepth; level += 1) {
             updateLeaf(level, 0);
         }
         depth = newDepth;
     }
 
-    function decreaseDepth(uint depthDifference) internal {
+    function decreaseDepth(uint8 depthDifference) internal {
         require(depthDifference > 0, "depthDifference must be non-zero");
-        uint oldDepth = depth;
+        uint8 oldDepth = depth;
         require(depthDifference < oldDepth, "Overflow protection");
-        uint newDepth = oldDepth - depthDifference;
+        uint8 newDepth = oldDepth - depthDifference;
 
-        for (uint level = newDepth; level < oldDepth; level++) {
+        for (uint8 level = newDepth; level < oldDepth; level += 1) {
             require(tree[level][1] == EMPTY_LEAF, "Subtree must be empty");
         }
         depth = newDepth;
@@ -61,19 +61,19 @@ abstract contract Spt {
         return tree[depth][0];
     }
 
-    function calculateEmptyLeafHash(uint toLevel) private {
-        uint256 currentDepth = depth;
+    function calculateEmptyLeafHash(uint8 toLevel) private {
+        uint8 currentDepth = depth;
         bytes32 prev = cacheEmptyValues[currentDepth];
 
-        for (uint index = currentDepth+1; index <= toLevel; index += 1) {
+        for (uint8 level = currentDepth+1; level <= toLevel; level += 1) {
             // We write the hash to both memory and storage at the same time
             // in order to use it in the next iteration. It is cheaper to read
             // from memory instead of storage, so we save it here.
-            cacheEmptyValues[index] = prev = hash(abi.encodePacked(prev, prev));
+            cacheEmptyValues[level] = prev = hash(abi.encodePacked(prev, prev));
         }
     }
 
-    function updateLeaf(uint level, uint i) private {
+    function updateLeaf(uint8 level, uint i) private {
         // level MUST be > 0
 
         uint i0 = 2*i;
@@ -101,7 +101,7 @@ abstract contract Spt {
     function modifyHash(uint index, bytes32 hashedElement) private {
         require(index < totalElements(), "Index out of bounds");
         tree[0][index] = hashedElement;
-        for (uint level = 1; level <= depth; level++) {
+        for (uint8 level = 1; level <= depth; level += 1) {
             // index >> level == index / 2**level
             uint currentIndex = index >> level;
             updateLeaf(level, currentIndex);

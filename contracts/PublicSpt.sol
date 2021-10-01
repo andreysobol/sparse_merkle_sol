@@ -4,13 +4,13 @@ pragma solidity ^0.7.0;
 import "./Spt.sol";
 
 abstract contract PublicSpt is Spt {
-    constructor(uint _depth) Spt(_depth) {}
+    constructor(uint8 _depth) Spt(_depth) {}
 
-    function _increaseDepth(uint depthDifference) public {
+    function _increaseDepth(uint8 depthDifference) public {
         super.increaseDepth(depthDifference);
     }
 
-    function _decreaseDepth(uint depthDifference) public {
+    function _decreaseDepth(uint8 depthDifference) public {
         super.decreaseDepth(depthDifference);
     }
 
