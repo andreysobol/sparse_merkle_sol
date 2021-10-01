@@ -9,7 +9,6 @@ abstract contract Spt {
     mapping(uint256 => bytes32) public cacheEmptyValues;
 
     uint public depth;
-    uint public maxElements;
 
     // tree level => index inside level => element hash
     mapping(uint256 => mapping(uint256 => bytes32)) public tree;
@@ -21,13 +20,12 @@ abstract contract Spt {
         cacheEmptyValues[0] = hash("");
         // current depth == 0
         calculateEmptyLeafHash(_depth);
-        setupDepth(_depth);
+        depth = _depth;
     }
 
-    function setupDepth(uint _depth) private {
-        depth = _depth;
+    function totalElements() public view returns (uint256) {
         // 1<<depth == 2**depth
-        maxElements = 1<<depth;
+        return 1<<depth;
     }
 
     function increaseDepth(uint depthDifference) internal {
@@ -41,7 +39,7 @@ abstract contract Spt {
         for (uint level = oldDepth+1; level <= newDepth; level++) {
             updateLeaf(level, 0);
         }
-        setupDepth(newDepth);
+        depth = newDepth;
     }
 
     function decreaseDepth(uint depthDifference) internal {
@@ -53,7 +51,7 @@ abstract contract Spt {
         for (uint level = newDepth; level < oldDepth; level++) {
             require(tree[level][1] == EMPTY_LEAF, "Subtree must be empty");
         }
-        setupDepth(newDepth);
+        depth = newDepth;
     }
 
     function getRoot() public view returns (bytes32) {
@@ -101,7 +99,7 @@ abstract contract Spt {
     }
 
     function modifyHash(uint index, bytes32 hashedElement) private {
-        require(index < maxElements, "Index out of bounds");
+        require(index < totalElements(), "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint level = 1; level <= depth; level++) {
             // index >> level == index / 2**level
