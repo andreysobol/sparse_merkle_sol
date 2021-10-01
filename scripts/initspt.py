@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from brownie import PublicSha256Spt, accounts
+from brownie import PublicSmtSha, accounts
 
 def main():
-    tree = PublicSha256Spt.deploy(40, {"from": accounts[0]})
+    tree = PublicSmtSha.deploy(40, {"from": accounts[0]})
     tx0 = tree._addElement(0, b"1")
     tx1 = tree._decreaseDepth(20)
     tx2 = tree._increaseDepth(20)
