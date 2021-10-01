@@ -4,7 +4,7 @@ pragma solidity ^0.7.0;
 abstract contract Spt {
     // because maxElements = 2**depth, so 256 will overflow
     uint8 constant MAX_DEPTH = 255;
-    bytes32 constant internal EMPTY_LEAF = 0x00;
+    bytes32 constant internal EMPTY_SUBTREE = 0x00;
 
     mapping(uint256 => bytes32) public cacheEmptyValues;
 
@@ -49,13 +49,13 @@ abstract contract Spt {
         uint8 newDepth = oldDepth - depthDifference;
 
         for (uint8 level = newDepth; level < oldDepth; level += 1) {
-            require(tree[level][1] == EMPTY_LEAF, "Subtree must be empty");
+            require(tree[level][1] == EMPTY_SUBTREE, "Subtree must be empty");
         }
         depth = newDepth;
     }
 
     function getRoot() public view returns (bytes32) {
-        if (tree[depth][0] == EMPTY_LEAF) {
+        if (tree[depth][0] == EMPTY_SUBTREE) {
             return cacheEmptyValues[depth];
         }
         return tree[depth][0];
@@ -82,16 +82,16 @@ abstract contract Spt {
         bytes32 v0 = tree[level-1][i0];
         bytes32 v1 = tree[level-1][i1];
 
-        if ((v0 == EMPTY_LEAF) && (v1 == EMPTY_LEAF)) {
+        if ((v0 == EMPTY_SUBTREE) && (v1 == EMPTY_SUBTREE)) {
             delete tree[level][i];
             return;
         }
 
-        if (v0 == EMPTY_LEAF) {
+        if (v0 == EMPTY_SUBTREE) {
             v0 = cacheEmptyValues[level-1];
         }
 
-        if (v1 == EMPTY_LEAF) {
+        if (v1 == EMPTY_SUBTREE) {
             v1 = cacheEmptyValues[level-1];
         }
 
@@ -122,7 +122,7 @@ abstract contract Spt {
     function removeElement(uint index) internal {
         require(elementData[index].length != 0, "Can't remove empty element");
         delete elementData[index];
-        modifyHash(index, EMPTY_LEAF);
+        modifyHash(index, EMPTY_SUBTREE);
     }
 
     // don't use abstract method in production. +7% gas
