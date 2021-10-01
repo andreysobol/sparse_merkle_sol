@@ -30,4 +30,8 @@ contract PublicSmt{{hashname}} {
     function _removeElement(uint index) public {
         tree.removeElement(index);
     }
+
+    function _getRoot() public {
+        tree.getRoot();
+    }
 }
