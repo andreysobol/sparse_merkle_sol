@@ -18,7 +18,7 @@ library SMT {
 
     function initialize(MerkleTree storage tree, uint8 _depth) internal {
         require(_depth > 0, "Depth must be non-zero");
-        tree.cacheEmptyValues[0] = hash("");
+        tree.cacheEmptyValues[0] = {{hash}}("");
         // current depth == 0
         tree._calculateEmptyLeafHash(_depth);
         tree.depth = _depth;
@@ -74,7 +74,7 @@ library SMT {
             // We write the hash to both memory and storage at the same time
             // in order to use it in the next iteration. It is cheaper to read
             // from memory instead of storage, so we save it here.
-            tree.cacheEmptyValues[level] = prev = hash(abi.encodePacked(prev, prev));
+            tree.cacheEmptyValues[level] = prev = {{hash}}(abi.encodePacked(prev, prev));
         }
     }
 
@@ -103,7 +103,7 @@ library SMT {
             v1 = tree.cacheEmptyValues[level-1];
         }
 
-        tree.tree[level][i] = hash(abi.encodePacked(v0, v1));
+        tree.tree[level][i] = {{hash}}(abi.encodePacked(v0, v1));
     }
 
     function _modifyTree(MerkleTree storage tree, uint index, bytes32 hashedElement) internal {
@@ -118,7 +118,7 @@ library SMT {
 
     function modifyElement(MerkleTree storage tree, uint index, bytes calldata data) internal {
         tree.elementData[index] = data;
-        bytes32 hashedElement = hash(data);
+        bytes32 hashedElement = {{hash}}(data);
         tree._modifyTree(index, hashedElement);
     }
 
@@ -134,9 +134,5 @@ library SMT {
         // elementData[index] = "";
         // We will spend much more gas
         tree._modifyTree(index, EMPTY_SUBTREE);
-    }
-
-    function hash(bytes memory data) internal pure returns (bytes32) {
-        return keccak256(data);
     }
 }
