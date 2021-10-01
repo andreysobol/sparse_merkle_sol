@@ -27,6 +27,7 @@ npm install ganache-cli
 ## Compile
 
 ```
+python processor.py
 brownie compile
 ```
 
