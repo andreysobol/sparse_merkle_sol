@@ -16,7 +16,6 @@ abstract contract Spt {
 
     constructor(uint8 _depth) {
         require(_depth > 0, "Depth must be non-zero");
-        //require(_depth <= MAX_DEPTH, "Overflow protection");
         cacheEmptyValues[0] = hash("");
         // current depth == 0
         _calculateEmptyLeafHash(_depth);
