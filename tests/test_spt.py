@@ -153,3 +153,21 @@ def test_decrease_non_empty(public_spt, accounts):
 
     assert reverted
 
+
+def test_insert_and_decrease(public_spt, accounts):
+
+    spt = PublicSha256Spt.deploy(10, {"from": accounts[0]})
+    spt._addElement(0, b"lol")
+
+    elhash = sha256(b"lol").digest()
+    empty = sha256(b"").digest()
+    r = elhash
+    for item in range(0, 10):
+        r = sha256(r + empty).digest()
+        empty = sha256(empty + empty).digest()
+    
+    assert spt.getRoot() == '0x' + r.hex()
+    
+    spt._decreaseDepth(9)
+
+    assert spt.getRoot() == '0x' + sha256(sha256(b"lol").digest() + sha256(b"").digest()).hexdigest()
