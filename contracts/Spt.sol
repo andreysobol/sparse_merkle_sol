@@ -101,7 +101,7 @@ abstract contract Spt {
         tree[level][i] = hash(abi.encodePacked(v0, v1));
     }
 
-    function _modifyHash(uint index, bytes32 hashedElement) private {
+    function _modifyTree(uint index, bytes32 hashedElement) private {
         require(index < totalElements(), "Index out of bounds");
         tree[0][index] = hashedElement;
         for (uint8 level = 1; level <= depth; level += 1) {
@@ -114,7 +114,7 @@ abstract contract Spt {
     function modifyElement(uint index, bytes calldata data) internal {
         elementData[index] = data;
         bytes32 hashedElement = hash(data);
-        _modifyHash(index, hashedElement);
+        _modifyTree(index, hashedElement);
     }
 
     function addElement(uint index, bytes calldata data) internal {
@@ -128,7 +128,7 @@ abstract contract Spt {
         // If we will use:
         // elementData[index] = "";
         // We will spend much more gas
-        _modifyHash(index, EMPTY_SUBTREE);
+        _modifyTree(index, EMPTY_SUBTREE);
     }
 
     // don't use abstract method in production. +7% gas
