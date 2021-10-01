@@ -80,6 +80,7 @@ library SMT{{hashname}} {
 
     function _updateNode(MerkleTree storage tree, uint8 level, uint i) internal {
         // level MUST be > 0
+        // level MUST be < 2^{depth}
 
         uint i0 = 2*i;
         uint i1 = 2*i+1;
