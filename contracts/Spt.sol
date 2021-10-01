@@ -57,9 +57,8 @@ abstract contract Spt {
     function getRoot() public view returns (bytes32) {
         if (tree[depth][0] == EMPTY_LEAF) {
             return cacheEmptyValues[depth];
-        } else {
-            return tree[depth][0];
         }
+        return tree[depth][0];
     }
 
     function calculateEmptyLeafHash(uint fromLevel, uint toLevel) private {
