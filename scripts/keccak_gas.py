@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from brownie import PublicSmtSha, accounts
+from brownie import PublicSmtKeccak, accounts
 
 def main():
-    tree = PublicSmtSha.deploy(10, {"from": accounts[0]})
+    tree = PublicSmtKeccak.deploy(10, {"from": accounts[0]})
 
     gas_used_add = []
     for item in range(0, 1024):
