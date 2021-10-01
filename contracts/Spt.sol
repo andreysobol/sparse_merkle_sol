@@ -45,7 +45,7 @@ abstract contract Spt {
     function decreaseDepth(uint8 depthDifference) internal {
         require(depthDifference > 0, "depthDifference must be non-zero");
         uint8 oldDepth = depth;
-        require(depthDifference < oldDepth, "Overflow protection");
+        require(depthDifference < oldDepth, "Underflow protection");
         uint8 newDepth = oldDepth - depthDifference;
 
         for (uint8 level = newDepth; level < oldDepth; level += 1) {
