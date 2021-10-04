@@ -35,3 +35,5 @@ contract PublicSmt{{hashname}} {
         return tree.getRoot();
     }
 }
+
+// vim: ft=solidity

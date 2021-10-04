@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 with open("contracts/Smt.metasol") as smt:
     contract = smt.read()
 
