@@ -1,4 +1,7 @@
 {
   "name": "sparse_merkle_sol",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "dependencies": {
+    "ganache-cli": "^6.12.2"
+  }
 }

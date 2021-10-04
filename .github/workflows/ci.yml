@@ -1,7 +1,6 @@
 name: CI
 
 on:
-  pull_request:
   push:
 
 jobs:
@@ -14,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-          cache: 'npm'
+          cache: 'yarn'
 
       - uses: actions/setup-python@v2
         with:
@@ -24,7 +23,6 @@ jobs:
       - name: Setup environment
         run: |
           pip install eth-brownie
-          npm install -g ganache-cli
 
       - name: Generate contracts
         run: ./processing.py

@@ -12,3 +12,4 @@ contracts/SmtSha.sol
 contracts/SmtKeccak.sol
 contracts/PublicSmtSha.sol
 contracts/PublicSmtKeccak.sol
+node_modules
