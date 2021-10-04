@@ -2,8 +2,6 @@
 pragma solidity ^0.8.0;
 
 library SMT{{hashname}} {
-    // because maxElements = 2**depth, so 256 will overflow
-    uint8 constant MAX_DEPTH = 255;
     bytes32 constant internal EMPTY_SUBTREE = 0x00;
 
     struct MerkleTree {
