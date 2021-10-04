@@ -27,7 +27,7 @@ npm install ganache-cli
 ## Compile
 
 ```
-python processor.py
+./processor.py
 brownie compile
 ```
 
@@ -50,61 +50,37 @@ brownie test
 ### sha256
 
 ```
-brownie run sha_gas
-```
+$ HASH=sha DEPTH=10 brownie run gas_stats
 
-Result (depth = `10`)
+--- ADD ---
+Median:  176784
+Average: 180346
+Min:     160889
+Max:     319815
 
-```
-ADD
-Median: 
-176784
-Average: 
-180346.3046875
-Min: 
-160889
-Max: 
-319815
-
-REMOVE
-Median: 
-99939
-Average: 
-90539.1396484375
-Min: 
-57647
-Max: 
-108117
+-- REMOVE --
+Median:  99939
+Average: 90539
+Min:     57647
+Max:     108117
 ```
 
 ### keccak256
 
 ```
-brownie run keccak_gas
-```
+$ HASH=keccak DEPTH=10 brownie run gas_stats
 
-Result (depth = `10`)
+--- ADD ---
+Median:  163973
+Average: 167535
+Min:     148078
+Max:     307004
 
-```
-ADD
-Median: 
-163973
-Average: 
-167535.3046875
-Min: 
-148078
-Max: 
-307004
-
-REMOVE
-Median: 
-87940
-Average: 
-80200.7353515625
-Min: 
-57647
-Max: 
-96118
+-- REMOVE --
+Median:  87940
+Average: 80200
+Min:     57647
+Max:     96118
 ```
 
 ### diagram
