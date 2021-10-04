@@ -17,6 +17,7 @@ library SMT{{hashname}} {
     using SMT{{hashname}} for MerkleTree;
 
     function initialize(MerkleTree storage tree, uint8 _depth) internal {
+        require(tree.depth == 0, "Cannot initialize twice");
         require(_depth > 0, "Depth must be non-zero");
         tree.emptySubtreeCache[0] = {{hash}}("");
         // current depth == 0
