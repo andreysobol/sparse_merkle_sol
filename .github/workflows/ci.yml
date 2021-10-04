@@ -22,8 +22,9 @@ jobs:
 
       - name: Setup environment
         run: |
-          echo $(pwd)/node_modules/.bin >> $GITHUB_PATH
           pip install eth-brownie
+          yarn install
+          echo $(pwd)/node_modules/.bin >> $GITHUB_PATH
 
       - name: Generate contracts
         run: ./processor.py
