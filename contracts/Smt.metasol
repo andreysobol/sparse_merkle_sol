@@ -10,7 +10,7 @@ library SMT{{hashname}} {
         uint8 depth;
         mapping(uint256 => bytes32) emptySubtreeCache;
         // tree level => index inside level => element hash
-        mapping(uint256 => mapping(uint256 => bytes32)) tree;
+        mapping(uint256 => mapping(uint256 => bytes32)) nodes;
         mapping(uint256 => bytes) elementData;
     }
 
@@ -21,7 +21,7 @@ library SMT{{hashname}} {
         require(_depth > 0, "Depth must be non-zero");
         tree.emptySubtreeCache[0] = {{hash}}("");
         // current depth == 0
-        tree._calculateEmptySubtree(_depth);
+        tree._calculateEmptySubtreeHash(_depth);
         tree.depth = _depth;
     }
 
@@ -37,7 +37,7 @@ library SMT{{hashname}} {
         // overflow protection done by solidity 0.8
         uint8 newDepth = oldDepth + depthDifference;
 
-        tree._calculateEmptySubtree(newDepth);
+        tree._calculateEmptySubtreeHash(newDepth);
 
         for (uint8 level = oldDepth+1; level <= newDepth; level = inc(level)) {
             tree._updateNode(level, 0);
@@ -53,7 +53,7 @@ library SMT{{hashname}} {
         uint8 newDepth = oldDepth - depthDifference;
 
         for (uint8 level = newDepth; level < oldDepth; level = inc(level)) {
-            require(tree.tree[level][1] == EMPTY_SUBTREE, "Subtree must be empty");
+            require(tree.nodes[level][1] == EMPTY_SUBTREE, "Subtree must be empty");
             // If we will delete this:
             // delete tree[level+1][0];
             // delete emptySubtreeCache[level+1];
@@ -64,13 +64,13 @@ library SMT{{hashname}} {
     }
 
     function getRoot(MerkleTree storage tree) internal view returns (bytes32) {
-        if (tree.tree[tree.depth][0] == EMPTY_SUBTREE) {
+        if (tree.nodes[tree.depth][0] == EMPTY_SUBTREE) {
             return tree.emptySubtreeCache[tree.depth];
         }
-        return tree.tree[tree.depth][0];
+        return tree.nodes[tree.depth][0];
     }
 
-    function _calculateEmptySubtree(MerkleTree storage tree, uint8 toLevel) internal {
+    function _calculateEmptySubtreeHash(MerkleTree storage tree, uint8 toLevel) internal {
         uint8 currentDepth = tree.depth;
         bytes32 prev = tree.emptySubtreeCache[currentDepth];
 
@@ -93,12 +93,12 @@ library SMT{{hashname}} {
             uint i0 = 2*i;
             uint i1 = 2*i+1;
 
-            v0 = tree.tree[level-1][i0];
-            v1 = tree.tree[level-1][i1];
+            v0 = tree.nodes[level-1][i0];
+            v1 = tree.nodes[level-1][i1];
         }
 
         if ((v0 == EMPTY_SUBTREE) && (v1 == EMPTY_SUBTREE)) {
-            delete tree.tree[level][i];
+            delete tree.nodes[level][i];
             // If we will use:
             // tree[level][i] = EMPTY_SUBTREE;
             // We will spend much more gas
@@ -113,13 +113,13 @@ library SMT{{hashname}} {
             unchecked { v1 = tree.emptySubtreeCache[level-1]; }
         }
 
-        tree.tree[level][i] = {{hash}}(abi.encodePacked(v0, v1));
+        tree.nodes[level][i] = {{hash}}(abi.encodePacked(v0, v1));
     }
 
     function _modifyTree(MerkleTree storage tree, uint index, bytes32 hashedElement) internal {
         require(tree.depth > 0, "Tree must be initialized");
         require(index < totalElements(tree), "Index out of bounds");
-        tree.tree[0][index] = hashedElement;
+        tree.nodes[0][index] = hashedElement;
         for (uint8 level = 1; level <= tree.depth; level = inc(level)) {
             // index >> level == index / 2**level
             uint currentIndex = index >> level;
