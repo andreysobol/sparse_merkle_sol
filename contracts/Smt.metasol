@@ -25,6 +25,7 @@ library SMT{{hashname}} {
 
     function totalElements(MerkleTree storage tree) internal view returns (uint256) {
         // 1<<depth == 2**depth
+        // max(totalElements) == 2**255
         return 1<<tree.depth;
     }
 
