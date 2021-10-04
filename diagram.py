@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import matplotlib.pyplot as plt
 from matplotlib.collections import EventCollection
 import numpy as np
