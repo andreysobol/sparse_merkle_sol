@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Contract tests
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Setup environment
+        run: |
+          pip install eth-brownie
+          yarn install
+          echo $(pwd)/node_modules/.bin >> $GITHUB_PATH
+
+      - name: Generate contracts
+        run: ./processor.py
+
+      - name: Run tests
+        run: brownie test
