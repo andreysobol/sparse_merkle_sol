@@ -22,6 +22,7 @@ jobs:
 
       - name: Setup environment
         run: |
+          echo $(pwd)/node_modules/.bin >> $GITHUB_PATH
           pip install eth-brownie
 
       - name: Generate contracts
