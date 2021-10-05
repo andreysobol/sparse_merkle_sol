@@ -50,6 +50,7 @@ library SMT{{hashname}} {
         uint8 oldDepth = tree.depth;
         // underflow protection done by solidity 0.8
         uint8 newDepth = oldDepth - depthDifference;
+        require(newDepth > 0, "Tree must have non-zero depth");
 
         for (uint8 level = newDepth; level < oldDepth; level = inc(level)) {
             require(tree.nodes[level][1] == EMPTY_SUBTREE, "Subtree must be empty");
