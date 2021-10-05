@@ -55,7 +55,7 @@ library SMT{{hashname}} {
         for (uint8 level = newDepth; level < oldDepth; level = inc(level)) {
             require(tree.nodes[level][1] == EMPTY_SUBTREE, "Subtree must be empty");
             // If we will delete this:
-            // delete tree[level+1][0];
+            // delete nodes[level+1][0];
             // delete emptySubtreeCache[level+1];
             // refund will be smaller than gas spent :(
         }
@@ -101,7 +101,7 @@ library SMT{{hashname}} {
         if ((v0 == EMPTY_SUBTREE) && (v1 == EMPTY_SUBTREE)) {
             delete tree.nodes[level][i];
             // If we will use:
-            // tree[level][i] = EMPTY_SUBTREE;
+            // nodes[level][i] = EMPTY_SUBTREE;
             // We will spend much more gas
             return;
         }
@@ -129,6 +129,7 @@ library SMT{{hashname}} {
     }
 
     function modifyElement(MerkleTree storage tree, uint index, bytes calldata data) internal {
+        require(data.length > 0, "New element can't be empty");
         tree.elementData[index] = data;
         bytes32 hashedElement = {{hash}}(data);
         tree._modifyTree(index, hashedElement);
