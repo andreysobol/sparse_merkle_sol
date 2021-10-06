@@ -129,7 +129,7 @@ library SMT{{hashname}} {
     }
 
     function modifyElement(MerkleTree storage tree, uint index, bytes calldata data) internal {
-        require(data.length > 0, "New element can't be empty");
+        require(data.length > 0, "Element can't be empty");
         tree.elementData[index] = data;
         bytes32 hashedElement = {{hash}}(data);
         tree._modifyTree(index, hashedElement);
