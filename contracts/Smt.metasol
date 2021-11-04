@@ -128,14 +128,14 @@ library SMT{{hashname}} {
         }
     }
 
-    function modifyElement(MerkleTree storage tree, uint index, bytes calldata data) internal {
+    function modifyElement(MerkleTree storage tree, uint index, bytes memory data) internal {
         require(data.length > 0, "Element can't be empty");
         tree.elementData[index] = data;
         bytes32 hashedElement = {{hash}}(data);
         tree._modifyTree(index, hashedElement);
     }
 
-    function addElement(MerkleTree storage tree, uint index, bytes calldata data) internal {
+    function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
         require(tree.elementData[index].length == 0, "Element already exists");
         tree.modifyElement(index, data);
     }
