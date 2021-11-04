@@ -53,10 +53,10 @@ brownie test
 $ HASH=sha DEPTH=10 brownie run gas_stats
 
 --- ADD ---
-Median:   177686
-Average:  181248
-Min:      161791
-Max:      320717
+Median:   178003
+Average:  181565
+Min:      162108
+Max:      321034
 
 -- REMOVE --
 Median:   100703
