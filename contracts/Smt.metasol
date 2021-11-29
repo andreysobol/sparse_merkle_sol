@@ -127,7 +127,7 @@ library SMT{{hashname}} {
         for (uint8 level = 1; level <= tree.depth; level = inc(level)) {
             // index >> 1 (level times) == index / 2**level
             currentIndex = currentIndex >> 1;
-            tree._updateNode(level, currentIndex);
+            _updateNode(tree, level, currentIndex);
         }
     }
 
