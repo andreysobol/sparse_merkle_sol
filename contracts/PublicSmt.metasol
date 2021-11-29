@@ -11,27 +11,27 @@ contract PublicSmt{{hashname}} {
         tree.initialize(_depth);
     }
 
-    function _increaseDepth(uint8 depthDifference) public {
+    function increaseDepth(uint8 depthDifference) public {
         tree.increaseDepth(depthDifference);
     }
 
-    function _decreaseDepth(uint8 depthDifference) public {
+    function decreaseDepth(uint8 depthDifference) public {
         tree.decreaseDepth(depthDifference);
     }
 
-    function _modifyElement(uint index, bytes calldata element) public {
+    function modifyElement(uint index, bytes calldata element) public {
         tree.modifyElement(index, element);
     }
 
-    function _addElement(uint index, bytes calldata element) public {
+    function addElement(uint index, bytes calldata element) public {
         tree.addElement(index, element);
     }
 
-    function _removeElement(uint index) public {
+    function removeElement(uint index) public {
         tree.removeElement(index);
     }
 
-    function _getRoot() public view returns (bytes32) {
+    function getRoot() public view returns (bytes32) {
         return tree.getRoot();
     }
 }
