@@ -20,7 +20,7 @@ library SMT{{hashname}} {
         require(_depth < 255, "Depth must be < 255");
         tree.emptySubtreeCache[0] = {{hash}}("");
         // current depth == 0
-        tree._calculateEmptySubtreeHash(_depth);
+        _calculateEmptySubtreeHash(tree, _depth);
         tree.depth = _depth;
     }
 
@@ -38,10 +38,10 @@ library SMT{{hashname}} {
         uint8 newDepth = oldDepth + depthDifference;
         require(newDepth < 255, "newDepth must be < 255");
 
-        tree._calculateEmptySubtreeHash(newDepth);
+        _calculateEmptySubtreeHash(tree, newDepth);
 
         for (uint8 level = oldDepth+1; level <= newDepth; level = inc(level)) {
-            tree._updateNode(level, 0);
+            _updateNode(tree, level, 0);
         }
 
         tree.depth = newDepth;
@@ -72,7 +72,7 @@ library SMT{{hashname}} {
         return tree.nodes[tree.depth][0];
     }
 
-    function _calculateEmptySubtreeHash(MerkleTree storage tree, uint8 toLevel) internal {
+    function _calculateEmptySubtreeHash(MerkleTree storage tree, uint8 toLevel) private {
         uint8 currentDepth = tree.depth;
         bytes32 prev = tree.emptySubtreeCache[currentDepth];
 
@@ -84,7 +84,7 @@ library SMT{{hashname}} {
         }
     }
 
-    function _updateNode(MerkleTree storage tree, uint8 level, uint i) internal {
+    function _updateNode(MerkleTree storage tree, uint8 level, uint i) private {
         // conditions, enforced by other methods:
         // 1 <= level <= depth
         // 0 <= i     <  2**(depth-level)
@@ -119,7 +119,7 @@ library SMT{{hashname}} {
         tree.nodes[level][i] = {{hash}}(abi.encodePacked(v0, v1));
     }
 
-    function _modifyTree(MerkleTree storage tree, uint index, bytes32 hashedElement) internal {
+    function _modifyTree(MerkleTree storage tree, uint index, bytes32 hashedElement) private {
         require(tree.depth > 0, "Tree must be initialized");
         require(index < totalElements(tree), "Index out of bounds");
         tree.nodes[0][index] = hashedElement;
@@ -135,7 +135,7 @@ library SMT{{hashname}} {
         require(data.length > 0, "Element can't be empty");
         tree.elementData[index] = data;
         bytes32 hashedElement = {{hash}}(data);
-        tree._modifyTree(index, hashedElement);
+        _modifyTree(tree, index, hashedElement);
     }
 
     function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
@@ -149,7 +149,7 @@ library SMT{{hashname}} {
         // If we will use:
         // elementData[index] = "";
         // We will spend much more gas
-        tree._modifyTree(index, EMPTY_SUBTREE);
+        _modifyTree(tree, index, EMPTY_SUBTREE);
     }
 
     // because solidity 0.8 ¯\_(ツ)_/¯

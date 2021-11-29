@@ -21,12 +21,12 @@ def gas_stats(hashname, depth):
 
     gas_used_add = []
     for item in range(2**depth):
-        tx = tree._addElement(item, b'apple')
+        tx = tree.addElement(item, b'apple')
         gas_used_add.append(tx.gas_used)
 
     gas_used_remove = []
     for item in range(2**depth):
-        tx = tree._removeElement(item)
+        tx = tree.removeElement(item)
         gas_used_remove.append(tx.gas_used)
 
     print_stats("--- ADD ---", gas_used_add, 2**depth)
