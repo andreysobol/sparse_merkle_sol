@@ -123,9 +123,10 @@ library SMT{{hashname}} {
         require(tree.depth > 0, "Tree must be initialized");
         require(index < totalElements(tree), "Index out of bounds");
         tree.nodes[0][index] = hashedElement;
+        uint currentIndex = index;
         for (uint8 level = 1; level <= tree.depth; level = inc(level)) {
-            // index >> level == index / 2**level
-            uint currentIndex = index >> level;
+            // index >> 1 (level times) == index / 2**level
+            currentIndex = currentIndex >> 1;
             _updateNode(tree, level, currentIndex);
         }
     }
