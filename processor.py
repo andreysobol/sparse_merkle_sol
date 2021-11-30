@@ -1,11 +1,63 @@
 #!/usr/bin/env python3
 
+from functools import reduce
+
+def ifcondition(contract):
+    #ls = contract.split("{{ if SET }}")
+    #lslenm1 = len(ls) - 1
+
+    #tryzip = zip(ls[:-1], ["{{ if SET }}"]*lslenm1)
+    #tryzipli = reduce(lambda x,y: x + list(y), tryzip, []) + ls[-1]
+
+    #ls = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], ["{{ if SET }}"]*lslenm1), []) + [ls[-1]])
+
+    def split_one(st, spliter):
+        sst = st.split(spliter)
+        sstlenm1 = len(sst) - 1
+        res = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], [spliter]*sstlenm1), []) + [ls[-1]])
+        return res
+    
+    ls = [contract]
+    ls = list(reduce(lambda x,y: x + split_one(y, "{{ if SET }}"), ls, []))
+    ls = list(reduce(lambda x,y: x + split_one(y, "{{ else }}"), ls, []))
+    ls = list(reduce(lambda x,y: x + split_one(y, "{{ enif }}"), ls, []))
+
+
+    #ls = list(reduce(lambda x,y: x + y.split("{{ else }}")))
+    #ls = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], ["{{ else }}"]*2), []) + ls[-1])
+    #ls = list(reduce(lambda x,y: x + y.split("{{ endif }}")))
+    #ls = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], ["{{ endif }}"]*2), []) + ls[-1])
+
+    if_is = [i for i in range(0, len(ls)) if ls[i] == "{{ if SET }}"]
+    else_is = [i for i in range(0, len(ls)) if ls[i] == "{{ else }}"]
+    endif_is = [i for i in range(0, len(ls)) if ls[i] == "{{ endif }}"]
+
+    ranges = reduce(lambda x,y: x + y, [list(range(r[0], r[1] + 1)) for r in zip(else_is, endif_is)], [])
+    toremove = ranges + if_is
+    withset = [ls[i] for i in range(0, len(ls)) if not (i in toremove)]
+    withset = "".join(withset)
+
+    ranges = reduce(lambda x,y: x + y, [list(range(r[0], r[1] + 1)) for r in zip(if_is, else_is)], [])
+    toremove = ranges + endif_is
+    withoutset = [ls[i] for i in range(0, len(ls)) if not (i in toremove)]
+    withoutset = "".join(withoutset)
+
+    return (withset, withoutset)
+
 with open("contracts/Smt.metasol") as smt:
     contract = smt.read()
 
 with open("contracts/SmtSha.sol", 'w') as smt_sha:
-    smt_sha.write(contract.replace("{{hash}}", "sha256").replace("{{hashname}}", "Sha"))
+    pre = contract.replace("{{hash}}", "sha256").replace("{{hashname}}", "Sha")
+    (_, withoutset) = ifcondition(pre)
+    smt_sha.write(withoutset)
     print("contracts/SmtSha.sol generated")
+
+with open("contracts/SetSmtSha.sol", 'w') as set_smt_sha:
+    pre = contract.replace("{{hash}}", "sha256").replace("{{hashname}}", "Sha")
+    (withset, _) = ifcondition(pre)
+    set_smt_sha.write(withset)
+    print("contracts/SetSmtSha.sol generated")
 
 with open("contracts/SmtKeccak.sol", 'w') as smt_keccak:
     smt_keccak.write(contract.replace("{{hash}}", "keccak256").replace("{{hashname}}", "Keccak"))
