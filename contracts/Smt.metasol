@@ -7,6 +7,10 @@ library SMT{{subcontractname}} {
     struct MerkleTree {
         uint8 depth;
         uint8 maxDepth;
+        {{ if SET }}
+        uint256 public firstEmptySlot = 0;
+        {{ else }}
+        {{ endif }}
         mapping(uint256 => bytes32) emptySubtreeCache;
         // tree level => index inside level => element hash
         mapping(uint256 => mapping(uint256 => bytes32)) nodes;
