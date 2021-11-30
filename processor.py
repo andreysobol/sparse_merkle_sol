@@ -7,13 +7,13 @@ def ifcondition(contract):
     def split_one(st, spliter):
         sst = st.split(spliter)
         sstlenm1 = len(sst) - 1
-        res = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], [spliter]*sstlenm1), []) + [ls[-1]])
+        res = list(reduce(lambda x,y: x + list(y), zip(sst[:-1], [spliter]*sstlenm1), []) + [sst[-1]])
         return res
     
     ls = [contract]
     ls = list(reduce(lambda x,y: x + split_one(y, "{{ if SET }}"), ls, []))
     ls = list(reduce(lambda x,y: x + split_one(y, "{{ else }}"), ls, []))
-    ls = list(reduce(lambda x,y: x + split_one(y, "{{ enif }}"), ls, []))
+    ls = list(reduce(lambda x,y: x + split_one(y, "{{ endif }}"), ls, []))
 
     if_is = [i for i in range(0, len(ls)) if ls[i] == "{{ if SET }}"]
     else_is = [i for i in range(0, len(ls)) if ls[i] == "{{ else }}"]
