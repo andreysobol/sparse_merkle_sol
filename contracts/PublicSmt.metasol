@@ -8,7 +8,7 @@ contract PublicSmt{{subcontractname}} {
     SMT{{subcontractname}}.MerkleTree public tree;
 
     constructor(uint8 _depth) {
-        tree.initialize(_depth);
+        tree.initialize(_depth, 254);
     }
 
     function increaseDepth(uint8 depthDifference) public {
