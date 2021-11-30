@@ -140,7 +140,7 @@ library SMT{{subcontractname}} {
 
     function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
         require(tree.elementData[index].length == 0, "Element already exists");
-        tree.modifyElement(index, data);
+        modifyElement(tree, index, data);
     }
 
     function removeElement(MerkleTree storage tree, uint index) internal {
