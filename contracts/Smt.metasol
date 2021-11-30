@@ -171,7 +171,7 @@ library SMT{{subcontractname}} {
     }
 
     {{ if SET }}
-    function addToNextEmpty(MerkleTree storage tree, uint index, bytes memory data) internal returns (uint256) {
+    function addToNextEmpty(MerkleTree storage tree, bytes memory data) internal returns (uint256) {
         uint256 index = tree.firstEmptySlot;
         tree.firstEmptySlot += 1;
 
@@ -184,18 +184,19 @@ library SMT{{subcontractname}} {
         return index;
     }
 
-    function removeAndRebase(MerkleTree storage tree, uint index) internal (bool){
-        tree.firstEmptySlot -= 1;
+    function removeAndRebase(MerkleTree storage tree, uint index) internal returns (bool){
+        uint256 localFirstEmptySlot = tree.firstEmptySlot - 1;
+        tree.firstEmptySlot = localFirstEmptySlot;
         bool result = false;
-        if (index != firstEmptySlot) {
+        if (index != localFirstEmptySlot) {
             // move the last element into empty place
-            bytes memory element = tree.elementData[firstEmptySlot];
+            bytes memory element = tree.elementData[localFirstEmptySlot];
             tree.modifyElement(index, element);
             result = true;
         }
-        _removeElement(tree, firstEmptySlot);
+        _removeElement(tree, localFirstEmptySlot);
 
-        if (firstEmptySlot == (1 << (tree.depth - 1))) {
+        if (localFirstEmptySlot == (1 << (tree.depth - 1))) {
             tree.decreaseDepth(1);
         }
 
