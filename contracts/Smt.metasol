@@ -8,7 +8,7 @@ library SMT{{subcontractname}} {
         uint8 depth;
         uint8 maxDepth;
         {{ if SET }}
-        uint256 public firstEmptySlot = 0;
+        uint256 firstEmptySlot = 0;
         {{ else }}
         {{ endif }}
         mapping(uint256 => bytes32) emptySubtreeCache;
