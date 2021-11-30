@@ -171,9 +171,37 @@ library SMT{{subcontractname}} {
     }
 
     {{ if SET }}
+    function addToNextEmpty(MerkleTree storage tree, uint index, bytes memory data) internal returns (uint256) {
+        uint256 index = tree.firstEmptySlot;
+        tree.firstEmptySlot += 1;
 
+        require(index < (1 << tree.maxDepth), "Index out of range");
+        if (index == (1 << tree.depth)) {
+            tree.increaseDepth(1);
+        }
+
+        _addElement(tree, index, data);
+        return index;
+    }
+
+    function removeAndRebase(MerkleTree storage tree, uint index) internal (bool){
+        tree.firstEmptySlot -= 1;
+        bool result = false;
+        if (index != firstEmptySlot) {
+            // move the last element into empty place
+            bytes memory element = tree.elementData[firstEmptySlot];
+            tree.modifyElement(index, element);
+            result = true;
+        }
+        _removeElement(tree, firstEmptySlot);
+
+        if (firstEmptySlot == (1 << (tree.depth - 1))) {
+            tree.decreaseDepth(1);
+        }
+
+        return result;
+    }
     {{ else }}
-
     function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
         _addElement(tree, index, data);
     }
