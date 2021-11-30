@@ -131,19 +131,19 @@ library SMT{{subcontractname}} {
         }
     }
 
-    function modifyElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+    function _modifyElement(MerkleTree storage tree, uint index, bytes memory data) private {
         require(data.length > 0, "Element can't be empty");
         tree.elementData[index] = data;
         bytes32 hashedElement = {{hash}}(data);
         _modifyTree(tree, index, hashedElement);
     }
 
-    function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+    function _addElement(MerkleTree storage tree, uint index, bytes memory data) private {
         require(tree.elementData[index].length == 0, "Element already exists");
-        modifyElement(tree, index, data);
+        _modifyElement(tree, index, data);
     }
 
-    function removeElement(MerkleTree storage tree, uint index) internal {
+    function _removeElement(MerkleTree storage tree, uint index) private {
         require(tree.elementData[index].length != 0, "Can't remove empty element");
         delete tree.elementData[index];
         // If we will use:
@@ -156,6 +156,22 @@ library SMT{{subcontractname}} {
     function inc(uint8 x) pure private returns (uint8) {
         unchecked { return x + 1; }
     }
+
+    {{ if SET }}
+
+    {{ else }}
+    function modifyElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+        _modifyElement(tree, index, data);
+    }
+
+    function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+        _addElement(tree, index, data);
+    }
+
+    function removeElement(MerkleTree storage tree, uint index) internal {
+        _removeElement(tree, index);
+    }
+    {{ endif }}
 }
 
 // vim: ft=solidity
