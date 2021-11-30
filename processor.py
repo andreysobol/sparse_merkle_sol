@@ -3,13 +3,6 @@
 from functools import reduce
 
 def ifcondition(contract):
-    #ls = contract.split("{{ if SET }}")
-    #lslenm1 = len(ls) - 1
-
-    #tryzip = zip(ls[:-1], ["{{ if SET }}"]*lslenm1)
-    #tryzipli = reduce(lambda x,y: x + list(y), tryzip, []) + ls[-1]
-
-    #ls = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], ["{{ if SET }}"]*lslenm1), []) + [ls[-1]])
 
     def split_one(st, spliter):
         sst = st.split(spliter)
@@ -21,12 +14,6 @@ def ifcondition(contract):
     ls = list(reduce(lambda x,y: x + split_one(y, "{{ if SET }}"), ls, []))
     ls = list(reduce(lambda x,y: x + split_one(y, "{{ else }}"), ls, []))
     ls = list(reduce(lambda x,y: x + split_one(y, "{{ enif }}"), ls, []))
-
-
-    #ls = list(reduce(lambda x,y: x + y.split("{{ else }}")))
-    #ls = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], ["{{ else }}"]*2), []) + ls[-1])
-    #ls = list(reduce(lambda x,y: x + y.split("{{ endif }}")))
-    #ls = list(reduce(lambda x,y: x + list(y), zip(ls[:-1], ["{{ endif }}"]*2), []) + ls[-1])
 
     if_is = [i for i in range(0, len(ls)) if ls[i] == "{{ if SET }}"]
     else_is = [i for i in range(0, len(ls)) if ls[i] == "{{ else }}"]
