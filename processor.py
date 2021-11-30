@@ -35,28 +35,28 @@ with open("contracts/Smt.metasol") as smt:
     contract = smt.read()
 
 with open("contracts/SmtSha.sol", 'w') as smt_sha:
-    pre = contract.replace("{{hash}}", "sha256").replace("{{hashname}}", "Sha")
+    pre = contract.replace("{{hash}}", "sha256").replace("{{subcontractname}}", "Sha")
     (_, withoutset) = ifcondition(pre)
     smt_sha.write(withoutset)
     print("contracts/SmtSha.sol generated")
 
 with open("contracts/SetSmtSha.sol", 'w') as set_smt_sha:
-    pre = contract.replace("{{hash}}", "sha256").replace("{{hashname}}", "Sha")
+    pre = contract.replace("{{hash}}", "sha256").replace("{{subcontractname}}", "SetSha")
     (withset, _) = ifcondition(pre)
     set_smt_sha.write(withset)
     print("contracts/SetSmtSha.sol generated")
 
 with open("contracts/SmtKeccak.sol", 'w') as smt_keccak:
-    smt_keccak.write(contract.replace("{{hash}}", "keccak256").replace("{{hashname}}", "Keccak"))
+    smt_keccak.write(contract.replace("{{hash}}", "keccak256").replace("{{subcontractname}}", "Keccak"))
     print("contracts/SmtKeccak.sol generated")
 
 with open("contracts/PublicSmt.metasol") as p_smt:
     public_contract = p_smt.read()
 
 with open("contracts/PublicSmtSha.sol", 'w') as p_smt_sha:
-    p_smt_sha.write(public_contract.replace("{{hashname}}", "Sha"))
+    p_smt_sha.write(public_contract.replace("{{subcontractname}}", "Sha"))
     print("contracts/PublicSmtSha.sol generated")
 
 with open("contracts/PublicSmtKeccak.sol", 'w') as p_smt_keccak:
-    p_smt_keccak.write(public_contract.replace("{{hashname}}", "Keccak"))
+    p_smt_keccak.write(public_contract.replace("{{subcontractname}}", "Keccak"))
     print("contracts/PublicSmtKeccak.sol generated")

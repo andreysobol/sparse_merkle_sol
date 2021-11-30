@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-library SMT{{hashname}} {
+library SMT{{subcontractname}} {
     bytes32 constant internal EMPTY_SUBTREE = 0x00;
 
     struct MerkleTree {
@@ -12,7 +12,7 @@ library SMT{{hashname}} {
         mapping(uint256 => bytes) elementData;
     }
 
-    using SMT{{hashname}} for MerkleTree;
+    using SMT{{subcontractname}} for MerkleTree;
 
     function initialize(MerkleTree storage tree, uint8 _depth) internal {
         require(tree.depth == 0, "Cannot initialize twice");

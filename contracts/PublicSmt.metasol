@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./Smt{{hashname}}.sol";
+import "./Smt{{subcontractname}}.sol";
 
-contract PublicSmt{{hashname}} {
-    using SMT{{hashname}} for SMT{{hashname}}.MerkleTree;
-    SMT{{hashname}}.MerkleTree public tree;
+contract PublicSmt{{subcontractname}} {
+    using SMT{{subcontractname}} for SMT{{subcontractname}}.MerkleTree;
+    SMT{{subcontractname}}.MerkleTree public tree;
 
     constructor(uint8 _depth) {
         tree.initialize(_depth);
