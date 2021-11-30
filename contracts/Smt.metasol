@@ -165,12 +165,14 @@ library SMT{{subcontractname}} {
         unchecked { return x + 1; }
     }
 
+    function modifyElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+        require(tree.elementData[index].length != 0, "Element doesn't exists");
+        _modifyElement(tree, index, data);
+    }
+
     {{ if SET }}
 
     {{ else }}
-    function modifyElement(MerkleTree storage tree, uint index, bytes memory data) internal {
-        _modifyElement(tree, index, data);
-    }
 
     function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
         _addElement(tree, index, data);
