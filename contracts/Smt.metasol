@@ -197,7 +197,7 @@ library SMT{{subcontractname}} {
         }
         _removeElement(tree, localFirstEmptySlot);
 
-        if (localFirstEmptySlot == (1 << (tree.depth - 1))) {
+        if ((localFirstEmptySlot == (1 << (tree.depth - 1))) && (localFirstEmptySlot > 0)) {
             _decreaseDepth(tree, 1);
         }
 
