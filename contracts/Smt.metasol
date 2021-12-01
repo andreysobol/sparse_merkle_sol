@@ -19,7 +19,7 @@ library SMT{{subcontractname}} {
 
     using SMT{{subcontractname}} for MerkleTree;
 
-    function initialize(MerkleTree storage tree, uint8 _depth, uint8 _maxDepth) internal {
+    function _initialize(MerkleTree storage tree, uint8 _depth, uint8 _maxDepth) private {
         require(tree.depth == 0, "Cannot initialize twice");
         require(_depth > 0, "Depth must be non-zero");
         require(_depth < 255, "Depth must be < 255");
@@ -203,6 +203,10 @@ library SMT{{subcontractname}} {
 
         return result;
     }
+
+    function initialize(MerkleTree storage tree, uint8 maxDepth) internal {
+        _initialize(tree, 1, maxDepth);
+    }
     {{ else }}
     function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
         _addElement(tree, index, data);
@@ -218,6 +222,10 @@ library SMT{{subcontractname}} {
 
     function decreaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
         _decreaseDepth(tree, depthDifference);
+    }
+
+    function initialize(MerkleTree storage tree, uint8 depth) internal {
+        _initialize(tree, depth, 254);
     }
     {{ endif }}
 }
