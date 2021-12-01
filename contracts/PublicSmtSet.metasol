@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "./SetSmt{{subcontractname}}.sol";
+
+contract PublicSmt{{subcontractname}} {
+    using SMT{{subcontractname}} for SMT{{subcontractname}}.MerkleTree;
+    SMT{{subcontractname}}.MerkleTree public tree;
+
+    constructor(uint8 _depth) {
+        tree.initialize(_depth, 254);
+    }
+
+    function modifyElement(uint index, bytes calldata element) public {
+        tree.modifyElement(index, element);
+    }
+
+    function addElement(uint index, bytes calldata element) public {
+        tree.addElement(index, element);
+    }
+
+    function removeElement(uint index) public {
+        tree.removeElement(index);
+    }
+
+    function getRoot() public view returns (bytes32) {
+        return tree.getRoot();
+    }
+}
+
+// vim: ft=solidity
