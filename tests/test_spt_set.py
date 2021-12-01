@@ -42,3 +42,17 @@ def test_add_element(accounts):
     assert contract.getFirstEmptySlot() == 1
     root = '0x' + sha256(sha256(b'apple').digest() + sha256(b'').digest()).hexdigest()
     assert contract.getRoot() == root
+
+def test_remove_element(accounts):
+    contract = PublicSmtSetSha.deploy(10, {"from": accounts[0]})
+    assert contract.getDepth() == 1
+    assert contract.getFirstEmptySlot() == 0
+    contract.addToNextEmpty(b"apple")
+    assert contract.getFirstEmptySlot() == 1
+    root = '0x' + sha256(sha256(b'apple').digest() + sha256(b'').digest()).hexdigest()
+    assert contract.getRoot() == root
+    contract.removeAndRebase(0)
+    empty_hash = sha256(b'').digest()
+    empty_root = '0x' + sha256(empty_hash * 2).hexdigest()
+    assert contract.getRoot() == empty_root
+    assert contract.getFirstEmptySlot() == 0
