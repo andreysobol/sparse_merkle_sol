@@ -5,6 +5,7 @@ Optimised sparse merkle tree writen in solidity.
 Key features:
 - Size adjustments (function `increaseDepth` and `decreaseDepth`)
 - Update elemnts - `O(log N)`
+- Auto adjustment and index management using 2 functions `addToNextEmpty` and `removeAndRebase`
 
 ## Instalation
 
