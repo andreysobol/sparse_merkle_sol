@@ -75,4 +75,14 @@ def test_remove_first(accounts):
     contract.addToNextEmpty(b"ice")
     assert contract.getRoot() == get_root_4([b"apple", b"fish", b"banana", b"ice"])
     contract.removeAndRebase(0)
-    assert contract.getRoot() == get_root_4([b"fish", b"banana", b"ice", b""])
+    assert contract.getRoot() == get_root_4([b"ice", b"fish", b"banana", b""])
+
+def test_remove_second(accounts):
+    contract = PublicSmtSetSha.deploy(10, {"from": accounts[0]})
+    contract.addToNextEmpty(b"apple")
+    contract.addToNextEmpty(b"fish")
+    contract.addToNextEmpty(b"banana")
+    contract.addToNextEmpty(b"ice")
+    assert contract.getRoot() == get_root_4([b"apple", b"fish", b"banana", b"ice"])
+    contract.removeAndRebase(0)
+    assert contract.getRoot() == get_root_4([b"apple", b"ice", b"banana", b""])
