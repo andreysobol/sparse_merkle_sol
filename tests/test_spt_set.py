@@ -2,6 +2,7 @@ from brownie import PublicSmtSetSha, SMTSha, accounts
 from hashlib import sha256
 
 import pytest
+import math
 
 def get_root_4(elements):
     h_elements = [sha256(item).digest() for item in elements]
@@ -74,7 +75,7 @@ def test_remove_second(accounts):
     contract.removeAndRebase(1)
     assert contract.getRoot() == get_root_4([b"apple", b"ice", b"banana", b""])
 
-def test_limit(public_spt, accounts):
+def test_limit(accounts):
     contract = PublicSmtSetSha.deploy(4, {"from": accounts[0]})
 
     for i in range(0, 2**4):
@@ -90,3 +91,34 @@ def test_limit(public_spt, accounts):
         assert "Index out of range" in e.message
 
     assert reverted
+
+def test_sizes(accounts):
+    contract = PublicSmtSetSha.deploy(8, {"from": accounts[0]})
+
+    for exp in range(1, 8):
+
+        for i in range(0, 2**exp):
+            assert contract.getFirstEmptySlot() == i
+            if i == 0 or i == 1:
+                depth = 1
+            else:
+                depth = math.ceil(math.log2(i))
+            bs = b"just" + (b"bla" * i)
+            contract.addToNextEmpty(bs)
+            assert contract.getFirstEmptySlot() == i + 1
+            if i + 1 == 0 or i + 1 == 1:
+                depth = 1
+            else:
+                depth = math.ceil(math.log2(i + 1))
+            assert contract.getDepth() == depth
+
+        for i in range(0, 2**exp):
+            assert contract.getFirstEmptySlot() == 2**exp - i
+            contract.removeAndRebase(0)
+            q = 2**exp - i - 1
+            assert contract.getFirstEmptySlot() == q 
+            if q == 0 or q == 1:
+                depth = 1
+            else:
+                depth = math.ceil(math.log2(q))
+            assert contract.getDepth() == depth
