@@ -177,7 +177,7 @@ library SMT{{subcontractname}} {
 
         require(index < (1 << tree.maxDepth), "Index out of range");
         if (index == (1 << tree.depth)) {
-            tree.increaseDepth(1);
+            _increaseDepth(tree, 1);
         }
 
         _addElement(tree, index, data);
@@ -197,7 +197,7 @@ library SMT{{subcontractname}} {
         _removeElement(tree, localFirstEmptySlot);
 
         if (localFirstEmptySlot == (1 << (tree.depth - 1))) {
-            tree.decreaseDepth(1);
+            decreaseDepth(tree, 1);
         }
 
         return result;
