@@ -38,7 +38,7 @@ library SMT{{subcontractname}} {
         return 1<<tree.depth;
     }
 
-    function increaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+    function _increaseDepth(MerkleTree storage tree, uint8 depthDifference) private {
         require(tree.depth > 0, "Tree must be initialized");
         require(depthDifference > 0, "depthDifference must be non-zero");
         uint8 oldDepth = tree.depth;
@@ -55,7 +55,7 @@ library SMT{{subcontractname}} {
         tree.depth = newDepth;
     }
 
-    function decreaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+    function _decreaseDepth(MerkleTree storage tree, uint8 depthDifference) private {
         require(depthDifference > 0, "depthDifference must be non-zero");
         uint8 oldDepth = tree.depth;
         // underflow protection done by solidity 0.8
@@ -209,6 +209,14 @@ library SMT{{subcontractname}} {
 
     function removeElement(MerkleTree storage tree, uint index) internal {
         _removeElement(tree, index);
+    }
+
+    function increaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+        _increaseDepth(tree, depthDifference);
+    }
+
+    function decreaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+        _decreaseDepth(tree, depthDifference);
     }
     {{ endif }}
 }
