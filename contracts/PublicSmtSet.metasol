@@ -26,6 +26,14 @@ contract PublicSmt{{subcontractname}} {
     function getRoot() public view returns (bytes32) {
         return tree.getRoot();
     }
+
+    function getDepth() public view returns (uint8) {
+        return tree.depth;
+    }
+
+    function getFirstEmptySlot() public view returns (uint256) {
+        return tree.firstEmptySlot;
+    }
 }
 
 // vim: ft=solidity

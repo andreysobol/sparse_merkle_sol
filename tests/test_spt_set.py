@@ -23,3 +23,22 @@ def get_root_4(elements):
 #    for i in check_size:
 #        empty_hash = sha256(empty_hash * 2).digest()
 #        assert trees[i].getRoot() == '0x' + empty_hash.hex()
+
+def test_empty(accounts):
+    contract = PublicSmtSetSha.deploy(10, {"from": accounts[0]})
+    empty_hash = sha256(b'').digest()
+    empty_root = '0x' + sha256(empty_hash * 2).hexdigest()
+    assert contract.getRoot() == empty_root
+
+def test_empty_depth(accounts):
+    contract = PublicSmtSetSha.deploy(10, {"from": accounts[0]})
+    assert contract.getDepth() == 1
+
+def test_add_element(accounts):
+    contract = PublicSmtSetSha.deploy(10, {"from": accounts[0]})
+    assert contract.getDepth() == 1
+    assert contract.getFirstEmptySlot() == 0
+    contract.addToNextEmpty(b"apple")
+    assert contract.getFirstEmptySlot() == 1
+    root = '0x' + sha256(sha256(b'apple').digest() + sha256(b'').digest()).hexdigest()
+    assert contract.getRoot() == root
