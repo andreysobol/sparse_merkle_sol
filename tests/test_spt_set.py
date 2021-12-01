@@ -56,6 +56,7 @@ def test_remove_element(accounts):
     empty_root = '0x' + sha256(empty_hash * 2).hexdigest()
     assert contract.getRoot() == empty_root
     assert contract.getFirstEmptySlot() == 0
+    assert contract.getDepth() == 1
 
 def test_remove_last(accounts):
     contract = PublicSmtSetSha.deploy(10, {"from": accounts[0]})
