@@ -10,20 +10,6 @@ def get_root_4(elements):
     root = sha256(left + right).digest()
     return '0x' + root.hex()
 
-#def test_setup_depth(public_spt, accounts):
-#    root = public_spt.getRoot()
-#    empty_hash = sha256(b'').digest()
-#    empty_root = '0x' + sha256(empty_hash * 2).hexdigest()
-#    assert root == empty_root
-
-#def test_empty_roots(accounts):
-#    check_size = range(1, 15)
-#    trees = { i: PublicSmtSetSha.deploy(i, 20, {"from": accounts[0]}) for i in check_size }
-#    empty_hash = sha256(b'').digest()
-#    for i in check_size:
-#        empty_hash = sha256(empty_hash * 2).digest()
-#        assert trees[i].getRoot() == '0x' + empty_hash.hex()
-
 def test_empty(accounts):
     contract = PublicSmtSetSha.deploy(10, {"from": accounts[0]})
     empty_hash = sha256(b'').digest()
