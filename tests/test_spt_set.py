@@ -84,5 +84,5 @@ def test_remove_second(accounts):
     contract.addToNextEmpty(b"banana")
     contract.addToNextEmpty(b"ice")
     assert contract.getRoot() == get_root_4([b"apple", b"fish", b"banana", b"ice"])
-    contract.removeAndRebase(0)
+    contract.removeAndRebase(1)
     assert contract.getRoot() == get_root_4([b"apple", b"ice", b"banana", b""])
