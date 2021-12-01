@@ -73,3 +73,20 @@ def test_remove_second(accounts):
     assert contract.getRoot() == get_root_4([b"apple", b"fish", b"banana", b"ice"])
     contract.removeAndRebase(1)
     assert contract.getRoot() == get_root_4([b"apple", b"ice", b"banana", b""])
+
+def test_limit(public_spt, accounts):
+    contract = PublicSmtSetSha.deploy(4, {"from": accounts[0]})
+
+    for i in range(0, 2**4):
+        bs = b"just" + (b"bla" * i)
+        contract.addToNextEmpty(bs)
+        assert contract.getFirstEmptySlot() == i + 1
+
+    reverted = False
+    try:
+        tx = contract.addToNextEmpty(b"try")
+    except Exception as e:
+        reverted = True
+        assert "Index out of range" in e.message
+
+    assert reverted
