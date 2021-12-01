@@ -7,8 +7,8 @@ contract PublicSmt{{subcontractname}} {
     using SMT{{subcontractname}} for SMT{{subcontractname}}.MerkleTree;
     SMT{{subcontractname}}.MerkleTree public tree;
 
-    constructor(uint8 _depth) {
-        tree.initialize(_depth, 254);
+    constructor(uint8 _depth, uint8 _maxDepth) {
+        tree.initialize(_depth, _maxDepth);
     }
 
     function modifyElement(uint index, bytes calldata element) public {
