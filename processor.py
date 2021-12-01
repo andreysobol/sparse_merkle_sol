@@ -69,13 +69,13 @@ with open("contracts/PublicSmtKeccak.sol", 'w') as p_smt_keccak:
     p_smt_keccak.write(public_contract.replace("{{subcontractname}}", "Keccak"))
     print("contracts/PublicSmtKeccak.sol generated")
 
-with open("contracts/PublicSmt.metasol") as p_smt:
-    public_contract = p_smt.read()
+with open("contracts/PublicSmtSet.metasol") as p_smt:
+    public_set_contract = p_smt.read()
 
 with open("contracts/PublicSmtSetSha.sol", 'w') as p_smt_sha:
-    p_smt_sha.write(public_contract.replace("{{subcontractname}}", "SetSha"))
+    p_smt_sha.write(public_set_contract.replace("{{subcontractname}}", "SetSha"))
     print("contracts/PublicSmtSetSha.sol generated")
 
 with open("contracts/PublicSmtSetKeccak.sol", 'w') as p_smt_keccak:
-    p_smt_keccak.write(public_contract.replace("{{subcontractname}}", "SetKeccak"))
+    p_smt_keccak.write(public_set_contract.replace("{{subcontractname}}", "SetKeccak"))
     print("contracts/PublicSmtSetKeccak.sol generated")
