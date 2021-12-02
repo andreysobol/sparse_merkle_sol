@@ -185,6 +185,8 @@ library SMT{{subcontractname}} {
         return index;
     }
 
+    // if true - that's mean that we write last element to index and remove last element
+    // if false - index it's last element
     function removeAndRebase(MerkleTree storage tree, uint index) internal returns (bool){
         uint256 localFirstEmptySlot = tree.firstEmptySlot - 1;
         tree.firstEmptySlot = localFirstEmptySlot;
