@@ -189,7 +189,7 @@ library SMT{{subcontractname}} {
     // if false - index it's last element
     function removeAndRebase(MerkleTree storage tree, uint index) internal returns (bool){
         uint256 localFirstEmptySlot = tree.firstEmptySlot - 1;
-        require(index <= localFirstEmptySlot), "Element doesn't exist");
+        require(index <= localFirstEmptySlot, "Element doesn't exist");
 
         tree.firstEmptySlot = localFirstEmptySlot;
         bool result = false;
