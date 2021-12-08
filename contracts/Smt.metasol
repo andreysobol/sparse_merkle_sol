@@ -173,7 +173,10 @@ library SMT{{subcontractname}} {
     {{ if SET }}
     function addToNextEmpty(MerkleTree storage tree, bytes memory data) internal returns (uint256) {
         uint256 index = tree.firstEmptySlot;
-        tree.firstEmptySlot = inc(tree.firstEmptySlot);
+
+        unchecked { 
+            tree.firstEmptySlot += 1;
+        }
 
         require(index < (1 << tree.maxDepth), "Index out of range");
         if (index == (1 << tree.depth)) {
