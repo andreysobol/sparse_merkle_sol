@@ -29,7 +29,7 @@ def test_one_element(public_spt, accounts):
     trees = [PublicSmtSha.deploy(2, {"from": accounts[0]}) for i in range(4)]
 
     for i in range(4):
-        trees[i].modifyElement(i, b'apple')
+        trees[i].addElement(i, b'apple')
         elements = [b''] * 4
         elements[i] = b'apple'
         root = get_root_4(elements)
@@ -38,22 +38,22 @@ def test_one_element(public_spt, accounts):
 def test_step_by_step(public_spt, accounts):
     spt = PublicSmtSha.deploy(2, {"from": accounts[0]})
 
-    spt.modifyElement(0, b'apple')
+    spt.addElement(0, b'apple')
     root = spt.getRoot()
     test_result = get_root_4([b'apple', b'', b'', b''])
     assert root == test_result
 
-    spt.modifyElement(1, b'avocado')
+    spt.addElement(1, b'avocado')
     root = spt.getRoot()
     test_result = get_root_4([b'apple', b'avocado', b'', b''])
     assert root == test_result
 
-    spt.modifyElement(2, b'clock')
+    spt.addElement(2, b'clock')
     root = spt.getRoot()
     test_result = get_root_4([b'apple', b'avocado', b'clock', b''])
     assert root == test_result
 
-    spt.modifyElement(3, b'great')
+    spt.addElement(3, b'great')
     root = spt.getRoot()
     test_result = get_root_4([b'apple', b'avocado', b'clock', b'great'])
     assert root == test_result
@@ -61,12 +61,12 @@ def test_step_by_step(public_spt, accounts):
 def test_remove(public_spt, accounts):
     spt = PublicSmtSha.deploy(2, {"from": accounts[0]})
 
-    spt.modifyElement(1, b'fish')
+    spt.addElement(1, b'fish')
     root = spt.getRoot()
     test_result = get_root_4([b'', b'fish', b'', b''])
     assert root == test_result
 
-    spt.modifyElement(3, b'ice')
+    spt.addElement(3, b'ice')
     root = spt.getRoot()
     test_result = get_root_4([b'', b'fish', b'', b'ice'])
     assert root == test_result

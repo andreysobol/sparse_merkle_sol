@@ -7,32 +7,32 @@ contract PublicSmt{{subcontractname}} {
     using SMT{{subcontractname}} for SMT{{subcontractname}}.MerkleTree;
     SMT{{subcontractname}}.MerkleTree public tree;
 
-    constructor(uint8 _depth) {
-        tree.initialize(_depth);
-    }
-
-    function increaseDepth(uint8 depthDifference) public {
-        tree.increaseDepth(depthDifference);
-    }
-
-    function decreaseDepth(uint8 depthDifference) public {
-        tree.decreaseDepth(depthDifference);
+    constructor(uint8 _maxDepth) {
+        tree.initialize(_maxDepth);
     }
 
     function modifyElement(uint index, bytes calldata element) public {
         tree.modifyElement(index, element);
     }
 
-    function addElement(uint index, bytes calldata element) public {
-        tree.addElement(index, element);
+    function addToNextEmpty(bytes memory data) public returns (uint256) {
+        return tree.addToNextEmpty(data);
     }
 
-    function removeElement(uint index) public {
-        tree.removeElement(index);
+    function removeAndRebase(uint index) public returns (bool) {
+        return tree.removeAndRebase(index);
     }
 
     function getRoot() public view returns (bytes32) {
         return tree.getRoot();
+    }
+
+    function getDepth() public view returns (uint8) {
+        return tree.depth;
+    }
+
+    function getFirstEmptySlot() public view returns (uint256) {
+        return tree.firstEmptySlot;
     }
 }
 

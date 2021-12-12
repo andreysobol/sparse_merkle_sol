@@ -1,27 +1,35 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-library SMT{{hashname}} {
+library SMT{{subcontractname}} {
     bytes32 constant internal EMPTY_SUBTREE = 0x00;
 
     struct MerkleTree {
         uint8 depth;
+        uint8 maxDepth;
+        {{ if SET }}
+        uint256 firstEmptySlot;
+        {{ else }}
+        {{ endif }}
         mapping(uint256 => bytes32) emptySubtreeCache;
         // tree level => index inside level => element hash
         mapping(uint256 => mapping(uint256 => bytes32)) nodes;
         mapping(uint256 => bytes) elementData;
     }
 
-    using SMT{{hashname}} for MerkleTree;
+    using SMT{{subcontractname}} for MerkleTree;
 
-    function initialize(MerkleTree storage tree, uint8 _depth) internal {
+    function _initialize(MerkleTree storage tree, uint8 _depth, uint8 _maxDepth) private {
         require(tree.depth == 0, "Cannot initialize twice");
         require(_depth > 0, "Depth must be non-zero");
-        require(_depth < 255, "Depth must be < 255");
+        require(_maxDepth < 255, "Max depth must be < 255");
+        require(_depth <= _maxDepth, "Depth must be <= Max depth");
+
         tree.emptySubtreeCache[0] = {{hash}}("");
         // current depth == 0
         _calculateEmptySubtreeHash(tree, _depth);
         tree.depth = _depth;
+        tree.maxDepth = _maxDepth;
     }
 
     function totalElements(MerkleTree storage tree) internal view returns (uint256) {
@@ -30,13 +38,13 @@ library SMT{{hashname}} {
         return 1<<tree.depth;
     }
 
-    function increaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+    function _increaseDepth(MerkleTree storage tree, uint8 depthDifference) private {
         require(tree.depth > 0, "Tree must be initialized");
         require(depthDifference > 0, "depthDifference must be non-zero");
         uint8 oldDepth = tree.depth;
         // overflow protection done by solidity 0.8
         uint8 newDepth = oldDepth + depthDifference;
-        require(newDepth < 255, "newDepth must be < 255");
+        require(newDepth <= tree.maxDepth, "newDepth must be <= maxDepth");
 
         _calculateEmptySubtreeHash(tree, newDepth);
 
@@ -47,7 +55,7 @@ library SMT{{hashname}} {
         tree.depth = newDepth;
     }
 
-    function decreaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+    function _decreaseDepth(MerkleTree storage tree, uint8 depthDifference) private {
         require(depthDifference > 0, "depthDifference must be non-zero");
         uint8 oldDepth = tree.depth;
         // underflow protection done by solidity 0.8
@@ -131,19 +139,19 @@ library SMT{{hashname}} {
         }
     }
 
-    function modifyElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+    function _modifyElement(MerkleTree storage tree, uint index, bytes memory data) private {
         require(data.length > 0, "Element can't be empty");
         tree.elementData[index] = data;
         bytes32 hashedElement = {{hash}}(data);
         _modifyTree(tree, index, hashedElement);
     }
 
-    function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+    function _addElement(MerkleTree storage tree, uint index, bytes memory data) private {
         require(tree.elementData[index].length == 0, "Element already exists");
-        tree.modifyElement(index, data);
+        _modifyElement(tree, index, data);
     }
 
-    function removeElement(MerkleTree storage tree, uint index) internal {
+    function _removeElement(MerkleTree storage tree, uint index) private {
         require(tree.elementData[index].length != 0, "Can't remove empty element");
         delete tree.elementData[index];
         // If we will use:
@@ -156,6 +164,75 @@ library SMT{{hashname}} {
     function inc(uint8 x) pure private returns (uint8) {
         unchecked { return x + 1; }
     }
+
+    function modifyElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+        require(tree.elementData[index].length != 0, "Element doesn't exists");
+        _modifyElement(tree, index, data);
+    }
+
+    {{ if SET }}
+    function addToNextEmpty(MerkleTree storage tree, bytes memory data) internal returns (uint256) {
+        uint256 index = tree.firstEmptySlot;
+
+        unchecked { 
+            tree.firstEmptySlot += 1;
+        }
+
+        require(index < (1 << tree.maxDepth), "Index out of range");
+        if (index == (1 << tree.depth)) {
+            _increaseDepth(tree, 1);
+        }
+
+        _addElement(tree, index, data);
+        return index;
+    }
+
+    // if true - that's mean that we write last element to index and remove last element
+    // if false - index it's last element
+    function removeAndRebase(MerkleTree storage tree, uint index) internal returns (bool){
+        uint256 localFirstEmptySlot = tree.firstEmptySlot - 1;
+
+        tree.firstEmptySlot = localFirstEmptySlot;
+        bool result = false;
+        if (index != localFirstEmptySlot) {
+            // move the last element into empty place
+            bytes memory element = tree.elementData[localFirstEmptySlot];
+            tree.modifyElement(index, element);
+            result = true;
+        }
+        _removeElement(tree, localFirstEmptySlot);
+
+        if ((localFirstEmptySlot == (1 << (tree.depth - 1))) && (localFirstEmptySlot > 1)) {
+            _decreaseDepth(tree, 1);
+        }
+
+        return result;
+    }
+
+    function initialize(MerkleTree storage tree, uint8 maxDepth) internal {
+        _initialize(tree, 1, maxDepth);
+    }
+    {{ else }}
+    function addElement(MerkleTree storage tree, uint index, bytes memory data) internal {
+        _addElement(tree, index, data);
+    }
+
+    function removeElement(MerkleTree storage tree, uint index) internal {
+        _removeElement(tree, index);
+    }
+
+    function increaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+        _increaseDepth(tree, depthDifference);
+    }
+
+    function decreaseDepth(MerkleTree storage tree, uint8 depthDifference) internal {
+        _decreaseDepth(tree, depthDifference);
+    }
+
+    function initialize(MerkleTree storage tree, uint8 depth) internal {
+        _initialize(tree, depth, 254);
+    }
+    {{ endif }}
 }
 
 // vim: ft=solidity
