@@ -54,16 +54,16 @@ brownie test
 $ HASH=sha DEPTH=10 brownie run gas_stats
 
 --- ADD ---
-Median:   178003
-Average:  181565
-Min:      162108
-Max:      321034
+Median:   178060
+Average:  181622
+Min:      162165
+Max:      321091
 
 -- REMOVE --
-Median:   100703
-Average:  91255
-Min:      58031
-Max:      108881
+Median:   100712
+Average:  91263
+Min:      58036
+Max:      108890
 ```
 
 ### keccak256
@@ -72,16 +72,16 @@ Max:      108881
 $ HASH=keccak DEPTH=10 brownie run gas_stats
 
 --- ADD ---
-Median:   164855
-Average:  168417
-Min:      148960
-Max:      307886
+Median:   164999
+Average:  168561
+Min:      149104
+Max:      308030
 
 -- REMOVE --
-Median:   88779
-Average:  80972
-Min:      58031
-Max:      96957
+Median:   88788
+Average:  80981
+Min:      58036
+Max:      96966
 ```
 
 ### diagram
