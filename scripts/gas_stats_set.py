@@ -38,8 +38,11 @@ def gas_stats(hashname, depth):
     gas_used_remove_last = []
     for item in range(2**depth):
         last = 2**depth - 1 - item
-        tx = tree.removeElement(last)
+        tx = tree.removeAndRebase(last)
         gas_used_remove_last.append(tx.gas_used)
+
+    contract = PublicSmtSetKeccak if hashname == 'keccak' else PublicSmtSetSha
+    tree = contract.deploy(depth, {"from": accounts[0]})
 
     for _ in range(2**depth):
         tx = tree.addToNextEmpty(b'apple')
@@ -47,9 +50,9 @@ def gas_stats(hashname, depth):
     gas_used_remove_random = []
     seed = b"seed"
     for item in range(2**depth):
-        r = (0, 2**depth - item)
+        r = range(0, 2**depth - item)
         seed, index = deterministic_random(seed, r)
-        tx = tree.removeElement(index)
+        tx = tree.removeAndRebase(index)
         gas_used_remove_random.append(tx.gas_used)
 
     print_stats("------ ADD ------", gas_used_add, 2**depth)
