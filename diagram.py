@@ -148,6 +148,49 @@ def create_plot_set_sha(
     plt.savefig('plot_set_sha.png')
     plt.show()
 
+def create_plot_set_keccak(
+    gas_used_add_keccak,
+    gas_used_remove_last_keccak,
+    gas_used_remove_random_keccak,
+):
+
+    xdata4 = [item for item in range(0, len(gas_used_add_keccak))]
+    xdata5 = [item for item in range(0, len(gas_used_remove_last_keccak))]
+    xdata6 = [item for item in range(0, len(gas_used_remove_random_keccak))]
+
+    # create some y data points
+    ydata4 = gas_used_add_keccak
+    ydata5 = gas_used_remove_last_keccak
+    ydata6 = gas_used_remove_random_keccak
+
+    # plot the data
+    fig = plt.figure()
+    fig.set_size_inches(10, 7)
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_ylabel("gas")
+    ax.set_xlabel("update index")
+
+
+    ax.plot(xdata4, ydata4, color='red', marker='o', markersize=1, linewidth = 0.0)
+    ax.plot(xdata5, ydata5, color='green', marker='o', markersize=1, linewidth = 0.0)
+    ax.plot(xdata6, ydata6, color='blue', marker='o', markersize=1, linewidth = 0.0)
+
+    ax.legend([
+        'Keccak256 add element',
+        'Keccak256 remove last',
+        'Keccak256 remove random',
+    ])
+
+    # set the limits
+    ax.set_xlim([0, 1024])
+    ax.set_ylim([0, 400000])
+
+    ax.set_title('Gas usage')
+
+    # display the plot
+    plt.savefig('plot_set_keccak.png')
+    plt.show()
+
 import json
 
 def read_from_file_and_run():
@@ -176,6 +219,14 @@ def read_from_file_and_run():
             data_sha["gas_used_add"],
             data_sha["gas_used_remove_last"],
             data_sha["gas_used_remove_random"],
+        )
+
+    with open('raw_data_set_keccak.json') as json_keccak_file:
+        data_keccak = json.load(json_keccak_file)
+        create_plot_set_keccak(
+            data_keccak["gas_used_add"],
+            data_keccak["gas_used_remove_last"],
+            data_keccak["gas_used_remove_random"],
         )
 
 read_from_file_and_run()
