@@ -122,6 +122,19 @@ Min:      25633
 Max:      177922
 ```
 
+#### keccak256
+
+```
+$ HASH=keccak DEPTH=10 brownie run gas_stats_set
+```
+
+```
+```
+
+#### diagram
+
+![Gas usage](./plot2.png)
+
 ## Generate diagrams
 
 Generate nice image:
