@@ -122,6 +122,10 @@ Min:      25633
 Max:      177922
 ```
 
+diagram
+
+![Gas usage](./plot_set_sha.png)
+
 #### keccak256
 
 ```
@@ -147,6 +151,10 @@ Average:  122772
 Min:      25633
 Max:      152939
 ```
+
+diagram
+
+![Gas usage](./plot_set_keccak.png)
 
 #### diagram
 
