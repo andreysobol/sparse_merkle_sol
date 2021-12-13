@@ -200,18 +200,18 @@ def read_from_file_and_run():
             data_keccak = json.load(json_keccak_file)
             create_plot(data_sha["gas_used_add"], data_sha["gas_used_remove"], data_keccak["gas_used_add"], data_keccak["gas_used_remove"])
 
-    with open('raw_data_set_sha.json') as json_sha_file:
-        with open('raw_data_set_keccak.json') as json_keccak_file:
-            data_sha = json.load(json_sha_file)
-            data_keccak = json.load(json_keccak_file)
-            create_plot2(
-                data_sha["gas_used_add"],
-                data_sha["gas_used_remove_last"],
-                data_sha["gas_used_remove_random"],
-                data_keccak["gas_used_add"],
-                data_keccak["gas_used_remove_last"],
-                data_keccak["gas_used_remove_random"],
-            )
+    #with open('raw_data_set_sha.json') as json_sha_file:
+    #    with open('raw_data_set_keccak.json') as json_keccak_file:
+    #        data_sha = json.load(json_sha_file)
+    #        data_keccak = json.load(json_keccak_file)
+    #        create_plot2(
+    #            data_sha["gas_used_add"],
+    #            data_sha["gas_used_remove_last"],
+    #            data_sha["gas_used_remove_random"],
+    #            data_keccak["gas_used_add"],
+    #            data_keccak["gas_used_remove_last"],
+    #            data_keccak["gas_used_remove_random"],
+    #        )
 
     with open('raw_data_set_sha.json') as json_sha_file:
         data_sha = json.load(json_sha_file)
