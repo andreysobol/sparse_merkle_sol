@@ -57,7 +57,7 @@ def gas_stats(hashname, depth):
 
     print_stats("------ ADD ------", gas_used_add, 2**depth)
     print_stats("-- REMOVE LAST --", gas_used_remove_last, 2**depth)
-    print_stats("- REMOVE RANDOM -", gas_used_remove_last, 2**depth)
+    print_stats("- REMOVE RANDOM -", gas_used_remove_random, 2**depth)
 
     kv = {
         "gas_used_add": gas_used_add,
