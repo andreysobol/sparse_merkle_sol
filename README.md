@@ -156,10 +156,6 @@ diagram
 
 ![Gas usage](./plot_set_keccak.png)
 
-#### diagram
-
-![Gas usage](./plot2.png)
-
 ## Generate diagrams
 
 Generate nice image:
