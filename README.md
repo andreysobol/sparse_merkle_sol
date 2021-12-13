@@ -129,6 +129,23 @@ $ HASH=keccak DEPTH=10 brownie run gas_stats_set
 ```
 
 ```
+------ ADD ------
+Median:   160873
+Average:  167152
+Min:      83055
+Max:      349283
+
+-- REMOVE LAST --
+Median:   82318
+Average:  79321
+Min:      25633
+Max:      102871
+
+- REMOVE RANDOM -
+Median:   126938
+Average:  122772
+Min:      25633
+Max:      152939
 ```
 
 #### diagram
