@@ -48,48 +48,118 @@ brownie test
 
 ## Gas usage
 
-### sha256
+### Regular
+
+#### sha256
 
 ```
 $ HASH=sha DEPTH=10 brownie run gas_stats
-
---- ADD ---
-Median:   178003
-Average:  181565
-Min:      162108
-Max:      321034
-
--- REMOVE --
-Median:   100703
-Average:  91255
-Min:      58031
-Max:      108881
 ```
 
-### keccak256
+```
+--- ADD ---
+Median:   178060
+Average:  181622
+Min:      162165
+Max:      321091
+
+-- REMOVE --
+Median:   100712
+Average:  91263
+Min:      58036
+Max:      108890
+```
+
+#### keccak256
 
 ```
 $ HASH=keccak DEPTH=10 brownie run gas_stats
-
---- ADD ---
-Median:   164855
-Average:  168417
-Min:      148960
-Max:      307886
-
--- REMOVE --
-Median:   88779
-Average:  80972
-Min:      58031
-Max:      96957
 ```
 
-### diagram
+```
+--- ADD ---
+Median:   164999
+Average:  168561
+Min:      149104
+Max:      308030
+
+-- REMOVE --
+Median:   88788
+Average:  80981
+Min:      58036
+Max:      96966
+```
+
+#### diagram
+
+![Gas usage](./plot.png)
+
+### Set
+
+#### sha256
+
+```
+$ HASH=sha DEPTH=10 brownie run gas_stats_set
+```
+
+```
+------ ADD ------
+Median:   173931
+Average:  179041
+Min:      85383
+Max:      364722
+
+-- REMOVE LAST --
+Median:   92517
+Average:  88375
+Min:      25633
+Max:      114792
+
+- REMOVE RANDOM -
+Median:   147151
+Average:  143713
+Min:      25633
+Max:      177922
+```
+
+diagram
+
+![Gas usage](./plot_set_sha.png)
+
+#### keccak256
+
+```
+$ HASH=keccak DEPTH=10 brownie run gas_stats_set
+```
+
+```
+------ ADD ------
+Median:   160873
+Average:  167152
+Min:      83055
+Max:      349283
+
+-- REMOVE LAST --
+Median:   82318
+Average:  79321
+Min:      25633
+Max:      102871
+
+- REMOVE RANDOM -
+Median:   126938
+Average:  122772
+Min:      25633
+Max:      152939
+```
+
+diagram
+
+![Gas usage](./plot_set_keccak.png)
+
+## Generate diagrams
 
 Generate nice image:
 
 ```
 python diagram.py
 ```
-
-![Gas usage](./plot.png)
